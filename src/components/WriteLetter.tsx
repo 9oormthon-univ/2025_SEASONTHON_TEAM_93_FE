@@ -1,141 +1,150 @@
 import './WriteLetter.css';
 import { useState } from 'react';
 
-const WriteLetter = () => {
-  const [formData, setFormData] = useState({
-    recipient: '',
-    title: '',
-    content: '',
-    senderName: '',
-    senderEmail: '',
-  });
+// 샘플 데이터
+const veteranProjects = [
+  {
+    id: 1,
+    title: '6.25 참전 용사 000',
+    volunteers: 123,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 2,
+    title: '6.25 참전 용사 001',
+    volunteers: 89,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 3,
+    title: '6.25 참전 용사 002',
+    volunteers: 156,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 4,
+    title: '6.25 참전 용사 003',
+    volunteers: 234,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 5,
+    title: '6.25 참전 용사 004',
+    volunteers: 67,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 6,
+    title: '6.25 참전 용사 005',
+    volunteers: 178,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 7,
+    title: '6.25 참전 용사 006',
+    volunteers: 145,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+  {
+    id: 8,
+    title: '6.25 참전 용사 007',
+    volunteers: 201,
+    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+  },
+];
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+const WriteLetter = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // 페이지당 8개 아이템 (2열 x 4행)
+
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(veteranProjects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProjects = veteranProjects.slice(startIndex, endIndex);
+
+  // 페이지 변경 함수
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // 편지 전송 로직
-    console.log('편지 전송:', formData);
-    alert('편지가 성공적으로 전송되었습니다!');
+  // 페이지네이션 버튼 생성
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    const maxVisiblePages = 5;
+
+    // 이전 버튼
+    buttons.push(
+      <button
+        key="prev"
+        className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <span>&lt;</span>
+      </button>
+    );
+
+    // 페이지 번호 버튼들
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <button
+          key={i}
+          className={`pagination-btn ${currentPage === i ? 'active' : ''}`}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // 다음 버튼
+    buttons.push(
+      <button
+        key="next"
+        className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        <span>&gt;</span>
+      </button>
+    );
+
+    return buttons;
   };
 
   return (
     <main className='write-letter'>
       <div className='content-container'>
-        <div className='letter-header'>
-          <h1>영웅에게 편지쓰기</h1>
-          <p>참전 용사님께 감사와 존경의 마음을 전해주세요</p>
+        <div className='projects-grid'>
+          {currentProjects.map(project => (
+            <div key={project.id} className='project-card'>
+              <h3 className='project-title'>{project.title}</h3>
+              <div className='volunteers-info'>
+                <div className='volunteer-avatars'>
+                  <div className='avatar'></div>
+                  <div className='avatar'></div>
+                  <div className='avatar'></div>
+                </div>
+                <span className='volunteer-count'>+{project.volunteers} Volunteers</span>
+              </div>
+              <p className='project-description'>{project.description}</p>
+            </div>
+          ))}
         </div>
 
-        <div className='letter-form-container'>
-          <form onSubmit={handleSubmit} className='letter-form'>
-            <div className='form-group'>
-              <label htmlFor='recipient'>받는 분</label>
-              <select
-                id='recipient'
-                name='recipient'
-                value={formData.recipient}
-                onChange={handleInputChange}
-                required
-              >
-                <option value=''>받는 분을 선택해주세요</option>
-                <option value='veteran1'>6.25 참전 용사 김영수님</option>
-                <option value='veteran2'>6.25 참전 용사 이철수님</option>
-                <option value='veteran3'>6.25 참전 용사 박민수님</option>
-                <option value='veteran4'>6.25 참전 용사 최영희님</option>
-                <option value='veteran5'>6.25 참전 용사 정수진님</option>
-              </select>
-            </div>
-
-            <div className='form-group'>
-              <label htmlFor='title'>편지 제목</label>
-              <input
-                type='text'
-                id='title'
-                name='title'
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder='편지 제목을 입력해주세요'
-                required
-              />
-            </div>
-
-            <div className='form-group'>
-              <label htmlFor='content'>편지 내용</label>
-              <textarea
-                id='content'
-                name='content'
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder='참전 용사님께 전하고 싶은 마음을 자유롭게 작성해주세요...'
-                rows={10}
-                required
-              />
-            </div>
-
-            <div className='sender-info'>
-              <h3>보내는 분 정보</h3>
-              <div className='form-row'>
-                <div className='form-group'>
-                  <label htmlFor='senderName'>이름</label>
-                  <input
-                    type='text'
-                    id='senderName'
-                    name='senderName'
-                    value={formData.senderName}
-                    onChange={handleInputChange}
-                    placeholder='보내는 분의 이름'
-                    required
-                  />
-                </div>
-                <div className='form-group'>
-                  <label htmlFor='senderEmail'>이메일</label>
-                  <input
-                    type='email'
-                    id='senderEmail'
-                    name='senderEmail'
-                    value={formData.senderEmail}
-                    onChange={handleInputChange}
-                    placeholder='보내는 분의 이메일'
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className='form-actions'>
-              <button type='button' className='btn-secondary'>
-                임시저장
-              </button>
-              <button type='submit' className='btn-primary'>
-                편지 전송하기
-              </button>
-            </div>
-          </form>
-
-          <div className='letter-guidelines'>
-            <h3>편지 작성 가이드라인</h3>
-            <ul>
-              <li>참전 용사님께 존경과 감사의 마음을 담아 작성해주세요</li>
-              <li>개인정보나 민감한 내용은 포함하지 마세요</li>
-              <li>정치적, 종교적 내용은 피해주세요</li>
-              <li>
-                편지는 검토 후 전달되며, 부적절한 내용은 전달되지 않을 수
-                있습니다
-              </li>
-              <li>전송된 편지는 수정이 불가능하니 신중히 작성해주세요</li>
-            </ul>
-          </div>
+        {/* 페이지네이션 */}
+        <div className='pagination'>
+          {renderPaginationButtons()}
         </div>
       </div>
     </main>
