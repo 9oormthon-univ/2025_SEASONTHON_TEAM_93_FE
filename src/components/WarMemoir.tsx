@@ -1,5 +1,6 @@
 import './WarMemoir.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 샘플 데이터
 const sampleMemoirs = [
@@ -92,6 +93,7 @@ const sampleMemoirs = [
 const WarMemoir = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // 페이지당 6개 아이템 (2열 x 3행)
+  const navigate = useNavigate();
 
   // 페이지네이션 계산
   const totalPages = Math.ceil(sampleMemoirs.length / itemsPerPage);
@@ -104,6 +106,11 @@ const WarMemoir = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  // 카드 클릭 핸들러
+  const handleCardClick = (memoirId: number) => {
+    navigate(`/memoir/${memoirId}`);
   };
 
   // 페이지네이션 버튼 생성
@@ -163,7 +170,11 @@ const WarMemoir = () => {
       <div className='content-container'>
         <div className='content-grid'>
           {currentMemoirs.map(memoir => (
-            <div key={memoir.id} className='content-card'>
+            <div
+              key={memoir.id}
+              className='content-card'
+              onClick={() => handleCardClick(memoir.id)}
+            >
               <div className='card-image'>
                 <div className='image-placeholder'>이미지</div>
               </div>
