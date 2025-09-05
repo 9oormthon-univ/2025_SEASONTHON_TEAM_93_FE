@@ -113,6 +113,19 @@
   border-color: #2563eb;
 }
 
+.pagination-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+  color: #9ca3af;
+}
+
+.pagination-btn.disabled:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: none;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
   .content-grid {
