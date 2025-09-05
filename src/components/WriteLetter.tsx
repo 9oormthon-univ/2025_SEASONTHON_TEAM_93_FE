@@ -1,5 +1,6 @@
 import './WriteLetter.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 샘플 데이터
 const veteranProjects = [
@@ -54,6 +55,7 @@ const veteranProjects = [
 ];
 
 const WriteLetter = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; // 페이지당 8개 아이템 (2열 x 4행)
 
@@ -68,6 +70,11 @@ const WriteLetter = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  // 카드 클릭 함수
+  const handleCardClick = (projectId: number) => {
+    navigate(`/write-detail/${projectId}`);
   };
 
   // 페이지네이션 버튼 생성
@@ -127,7 +134,11 @@ const WriteLetter = () => {
       <div className='content-container'>
         <div className='projects-grid'>
           {currentProjects.map(project => (
-            <div key={project.id} className='project-card'>
+            <div 
+              key={project.id} 
+              className='project-card'
+              onClick={() => handleCardClick(project.id)}
+            >
               <h3 className='project-title'>{project.title}</h3>
               <div className='volunteers-info'>
                 <div className='volunteer-avatars'>

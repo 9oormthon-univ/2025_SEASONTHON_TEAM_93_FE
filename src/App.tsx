@@ -3,6 +3,7 @@ import Header from './components/Header';
 import WarMemoir from './components/WarMemoir';
 import WarMemoirDetail from './components/WarMemoirDetail';
 import WriteLetter from './components/WriteLetter';
+import WriteDetail from './components/WriteDetail';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path='/' element={<WarMemoir />} />
           <Route path='/memoir/:id' element={<WarMemoirDetail />} />
           <Route path='/write-letter' element={<WriteLetter />} />
+          <Route path='/write-detail/:id' element={<WriteDetail />} />
         </Routes>
       </div>
     </Router>
