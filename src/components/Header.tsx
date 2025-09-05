@@ -1,33 +1,37 @@
 import './Header.css';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+  const location = useLocation();
   return (
     <header className='header'>
       <div className='header-container'>
         <div className='logo'>
-          <svg
-            className='logo-icon'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-          >
-            {/* 집 아이콘 */}
-            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' />
-            <polyline points='9,22 9,12 15,12 15,22' />
-            {/* 왼쪽 손 */}
-            <path d='M2 16c0-2 1-3 2-3s2 1 2 3' strokeWidth='1.5' />
-            <path d='M1 18c0-1 0.5-2 1.5-2s1.5 1 1.5 2' strokeWidth='1.5' />
-            {/* 오른쪽 손 */}
-            <path d='M22 16c0-2-1-3-2-3s-2 1-2 3' strokeWidth='1.5' />
-            <path d='M23 18c0-1 0-2-1.5-2s-1.5 1-1.5 2' strokeWidth='1.5' />
-          </svg>
-          <span className='logo-text'>영웅의 집</span>
+          <Link to='/' className='logo-link'>
+            <svg
+              className='logo-icon'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+            >
+              {/* 집 아이콘 */}
+              <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' />
+              <polyline points='9,22 9,12 15,12 15,22' />
+              {/* 왼쪽 손 */}
+              <path d='M2 16c0-2 1-3 2-3s2 1 2 3' strokeWidth='1.5' />
+              <path d='M1 18c0-1 0.5-2 1.5-2s1.5 1 1.5 2' strokeWidth='1.5' />
+              {/* 오른쪽 손 */}
+              <path d='M22 16c0-2-1-3-2-3s-2 1-2 3' strokeWidth='1.5' />
+              <path d='M23 18c0-1 0-2-1.5-2s-1.5 1-1.5 2' strokeWidth='1.5' />
+            </svg>
+            <span className='logo-text'>영웅의 집</span>
+          </Link>
         </div>
         <nav className='nav'>
           <ul className='nav-list'>
             <li>
-              <a href='#' className='nav-link'>
+              <Link to='/' className='nav-link'>
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -39,7 +43,7 @@ const Header = () => {
                   <polyline points='9,22 9,12 15,12 15,22' />
                 </svg>
                 Home
-              </a>
+              </Link>
             </li>
             <li>
               <a href='#' className='nav-link'>
@@ -56,7 +60,10 @@ const Header = () => {
               </a>
             </li>
             <li>
-              <a href='#' className='nav-link nav-link-highlighted'>
+              <Link 
+                to='/' 
+                className={`nav-link ${location.pathname === '/' || location.pathname.startsWith('/memoir/') ? 'nav-link-highlighted' : ''}`}
+              >
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -67,10 +74,13 @@ const Header = () => {
                   <path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' />
                 </svg>
                 나의 참전 회고록
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='#' className='nav-link'>
+              <Link 
+                to='/write-letter' 
+                className={`nav-link ${location.pathname === '/write-letter' || location.pathname.startsWith('/write-detail/') ? 'nav-link-highlighted' : ''}`}
+              >
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -85,7 +95,7 @@ const Header = () => {
                   <polyline points='10,9 9,9 8,9' />
                 </svg>
                 편지쓰기
-              </a>
+              </Link>
             </li>
             <li>
               <a href='#' className='nav-link'>

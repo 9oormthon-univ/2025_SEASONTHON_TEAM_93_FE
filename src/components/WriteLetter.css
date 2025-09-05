@@ -1,0 +1,236 @@
+.write-letter {
+  margin-top: 80px; /* 헤더 높이만큼 여백 */
+  min-height: calc(100vh - 80px);
+  background-color: #fff;
+  padding: 1rem 0;
+}
+
+.content-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.project-card {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.project-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.75rem 0;
+}
+
+.volunteers-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.volunteer-avatars {
+  display: flex;
+  gap: -0.5rem;
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  background-color: #6b7280;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -0.5rem;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+.volunteer-count {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.project-description {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  color: #6b7280;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.pagination-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.pagination-btn.active {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.pagination-btn.active:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.pagination-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+  color: #9ca3af;
+}
+
+.pagination-btn.disabled:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: none;
+}
+
+/* 반응형 디자인 - 모바일 퍼스트 */
+@media (min-width: 640px) {
+  .content-container {
+    padding: 0 1.5rem;
+  }
+  
+  .projects-grid {
+    gap: 1.25rem;
+  }
+  
+  .project-card {
+    padding: 1.25rem;
+  }
+  
+  .project-title {
+    font-size: 1.2rem;
+  }
+  
+  .avatar {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .volunteer-count {
+    font-size: 0.85rem;
+  }
+  
+  .project-description {
+    font-size: 0.9rem;
+  }
+  
+  .pagination {
+    gap: 0.5rem;
+  }
+  
+  .pagination-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .write-letter {
+    padding: 1.5rem 0;
+  }
+  
+  .content-container {
+    padding: 0 2rem;
+  }
+  
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .project-card {
+    padding: 1.5rem;
+  }
+  
+  .project-title {
+    font-size: 1.25rem;
+  }
+  
+  .avatar {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .volunteer-count {
+    font-size: 0.875rem;
+  }
+  
+  .project-description {
+    font-size: 0.9rem;
+  }
+  
+  .pagination {
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  
+  .pagination-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-container {
+    max-width: 1200px;
+    padding: 0 2rem;
+  }
+  
+  .projects-grid {
+    gap: 2rem;
+  }
+  
+  .project-card {
+    padding: 1.5rem;
+  }
+}
