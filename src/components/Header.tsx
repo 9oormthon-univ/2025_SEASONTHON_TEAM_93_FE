@@ -31,10 +31,7 @@ const Header = () => {
         <nav className='nav'>
           <ul className='nav-list'>
             <li>
-              <Link 
-                to='/' 
-                className={`nav-link ${location.pathname === '/' ? 'nav-link-highlighted' : ''}`}
-              >
+              <Link to='/' className='nav-link'>
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -65,7 +62,7 @@ const Header = () => {
             <li>
               <Link 
                 to='/' 
-                className={`nav-link ${location.pathname === '/' ? 'nav-link-highlighted' : ''}`}
+                className={`nav-link ${location.pathname === '/' || location.pathname.startsWith('/memoir/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
                   className='nav-icon'
