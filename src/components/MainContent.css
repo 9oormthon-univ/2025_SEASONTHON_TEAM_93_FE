@@ -22,7 +22,9 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .content-card:hover {
@@ -116,20 +118,20 @@
   .content-container {
     padding: 1rem;
   }
-  
+
   .content-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .card-content {
     padding: 1rem;
   }
-  
+
   .pagination {
     gap: 0.25rem;
   }
-  
+
   .pagination-btn {
     width: 36px;
     height: 36px;
