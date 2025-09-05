@@ -79,7 +79,7 @@ const Header = () => {
             <li>
               <Link 
                 to='/write-letter' 
-                className={`nav-link ${location.pathname === '/write-letter' ? 'nav-link-highlighted' : ''}`}
+                className={`nav-link ${location.pathname === '/write-letter' || location.pathname.startsWith('/write-detail/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
                   className='nav-icon'
