@@ -1,8 +1,8 @@
-import './MainContent.css';
+import './WarMemoir.css';
 
-const MainContent = () => {
+const WarMemoir = () => {
   return (
-    <main className='main-content'>
+    <main className='war-memoir'>
       <div className='content-container'>
         <div className='content-grid'>
           {/* 카드 1 */}
@@ -121,4 +121,4 @@ const MainContent = () => {
   );
 };
 
-export default MainContent;
+export default WarMemoir;

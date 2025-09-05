@@ -1,12 +1,12 @@
 import Header from './components/Header';
-import MainContent from './components/MainContent';
+import WarMemoir from './components/WarMemoir';
 import './App.css';
 
 function App() {
   return (
     <div className='app'>
       <Header />
-      <MainContent />
+      <WarMemoir />
     </div>
   );
 }
