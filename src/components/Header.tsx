@@ -115,6 +115,9 @@ const Header = () => {
           </ul>
         </nav>
       </div>
+      <div className='header-message'>
+        <p>"영웅에게 전하는 우리의 마음"</p>
+      </div>
     </header>
   );
 };
