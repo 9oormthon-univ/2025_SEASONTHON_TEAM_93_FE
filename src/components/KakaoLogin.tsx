@@ -3,7 +3,7 @@ import './KakaoLogin.css';
 const KakaoLogin = () => {
   const loginWithKakao = () => {
     // Spring Security OAuth2 Authorization 엔드포인트로 직접 리다이렉트
-    window.location.href = 'http://warhero.site/oauth2/authorization/kakao';
+    window.location.href = 'https://warhero.site/oauth2/authorization/kakao';
   };
 
   return (
