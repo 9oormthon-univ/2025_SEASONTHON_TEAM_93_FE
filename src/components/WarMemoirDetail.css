@@ -4,6 +4,42 @@
   background-color: #fff;
 }
 
+/* 로딩 및 에러 상태 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.error-message {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.error-message h2 {
+  font-size: 1.5rem;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.error-message .back-button {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error-message .back-button:hover {
+  background-color: #2563eb;
+}
+
 .content-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -94,6 +130,38 @@
   margin-bottom: 3rem;
   line-height: 1.8;
   color: #374151;
+}
+
+/* 섹션별 내용 스타일 */
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.content-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.section-content {
+  line-height: 1.8;
+}
+
+.section-paragraph {
+  margin-bottom: 1.5rem;
+  color: #374151;
+  font-size: 1.125rem;
+}
+
+.section-paragraph:last-child {
+  margin-bottom: 0;
 }
 
 .detail-content h3 {

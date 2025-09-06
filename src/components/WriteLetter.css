@@ -143,36 +143,36 @@
   .content-container {
     padding: 0 1.5rem;
   }
-  
+
   .projects-grid {
     gap: 1.25rem;
   }
-  
+
   .project-card {
     padding: 1.25rem;
   }
-  
+
   .project-title {
     font-size: 1.2rem;
   }
-  
+
   .avatar {
     width: 22px;
     height: 22px;
   }
-  
+
   .volunteer-count {
     font-size: 0.85rem;
   }
-  
+
   .project-description {
     font-size: 0.9rem;
   }
-  
+
   .pagination {
     gap: 0.5rem;
   }
-  
+
   .pagination-btn {
     width: 40px;
     height: 40px;
@@ -184,42 +184,42 @@
   .write-letter {
     padding: 1.5rem 0;
   }
-  
+
   .content-container {
     padding: 0 2rem;
   }
-  
+
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
-  
+
   .project-card {
     padding: 1.5rem;
   }
-  
+
   .project-title {
     font-size: 1.25rem;
   }
-  
+
   .avatar {
     width: 24px;
     height: 24px;
   }
-  
+
   .volunteer-count {
     font-size: 0.875rem;
   }
-  
+
   .project-description {
     font-size: 0.9rem;
   }
-  
+
   .pagination {
     gap: 0.5rem;
     margin-top: 2rem;
   }
-  
+
   .pagination-btn {
     width: 40px;
     height: 40px;
@@ -232,11 +232,11 @@
     max-width: 1200px;
     padding: 0 2rem;
   }
-  
+
   .projects-grid {
     gap: 2rem;
   }
-  
+
   .project-card {
     padding: 1.5rem;
   }
