@@ -1,6 +1,8 @@
 import './WarMemoir.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { memoirService } from '../api';
+import { Memoir, ApiResponse, MemoirPageResponse } from '../types/api';
 
 // 샘플 데이터
 const sampleMemoirs = [
@@ -91,20 +93,46 @@ const sampleMemoirs = [
 ];
 
 const WarMemoir = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // 페이지당 6개 아이템 (2열 x 3행)
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0); // API는 0부터 시작
+  const [memoirs, setMemoirs] = useState<Memoir[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const itemsPerPage = 6; // 페이지당 6개 아이템 (2열 x 3행)
 
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(sampleMemoirs.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentMemoirs = sampleMemoirs.slice(startIndex, endIndex);
+  // API에서 회고록 데이터 가져오기
+  useEffect(() => {
+    const fetchMemoirs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await memoirService.getMemoirs(currentPage, itemsPerPage);
+        
+        if (response.isSuccess && response.result) {
+          setMemoirs(response.result.content);
+          setTotalPages(response.result.totalPages);
+        } else {
+          setError('데이터를 불러오는데 실패했습니다.');
+        }
+      } catch (err) {
+        console.error('회고록 조회 실패:', err);
+        setError('서버 연결에 실패했습니다.');
+        // 에러 시 샘플 데이터 사용
+        setMemoirs(sampleMemoirs.slice(0, itemsPerPage));
+        setTotalPages(Math.ceil(sampleMemoirs.length / itemsPerPage));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // 페이지 변경 함수
+    fetchMemoirs();
+  }, [currentPage]);
+
+  // 페이지 변경 함수 (API는 0부터 시작하므로 -1)
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      setCurrentPage(page - 1);
     }
   };
 
@@ -165,30 +193,58 @@ const WarMemoir = () => {
     return buttons;
   };
 
+  if (loading) {
+    return (
+      <main className='war-memoir'>
+        <div className='content-container'>
+          <div className='loading'>로딩 중...</div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className='war-memoir'>
+        <div className='content-container'>
+          <div className='error'>{error}</div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className='war-memoir'>
       <div className='content-container'>
         <div className='content-grid'>
-          {currentMemoirs.map(memoir => (
+          {memoirs.map(memoir => (
             <div
               key={memoir.id}
               className='content-card'
               onClick={() => handleCardClick(memoir.id)}
             >
               <div className='card-image'>
-                <div className='image-placeholder'>이미지</div>
+                {memoir.image ? (
+                  <img src={memoir.image} alt={memoir.title} />
+                ) : (
+                  <div className='image-placeholder'>이미지</div>
+                )}
               </div>
               <div className='card-content'>
                 <h3 className='card-title'>{memoir.title}</h3>
-                <p className='card-date'>발간일 : {memoir.date}</p>
-                <p className='card-description'>{memoir.description}</p>
+                <p className='card-date'>{new Date(memoir.createdAt).toLocaleDateString('ko-KR')}</p>
+                <p className='card-description'>
+                  댓글 {memoir.replyCount}개 • 섹션 {memoir.sectionCount}개
+                </p>
               </div>
             </div>
           ))}
         </div>
 
         {/* 페이지네이션 */}
-        <div className='pagination'>{renderPaginationButtons()}</div>
+        {totalPages > 1 && (
+          <div className='pagination'>{renderPaginationButtons()}</div>
+        )}
       </div>
     </main>
   );

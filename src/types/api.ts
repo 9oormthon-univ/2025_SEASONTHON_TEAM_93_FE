@@ -34,13 +34,51 @@ export interface AuthResponse {
 export interface Memoir {
   id: number;
   title: string;
-  content: string;
-  author: string;
+  image: string;
   createdAt: string;
-  updatedAt: string;
-  imageUrl?: string;
-  viewCount: number;
-  likeCount: number;
+  replyCount: number;
+  sectionCount: number;
+}
+
+export interface Pageable {
+  unpaged: boolean;
+  paged: boolean;
+  pageNumber: number;
+  pageSize: number;
+  offset: number;
+  sort: {
+    unsorted: boolean;
+    sorted: boolean;
+    empty: boolean;
+  };
+}
+
+export interface Sort {
+  unsorted: boolean;
+  sorted: boolean;
+  empty: boolean;
+}
+
+export interface MemoirPageResponse {
+  totalPages: number;
+  totalElements: number;
+  pageable: Pageable;
+  numberOfElements: number;
+  size: number;
+  content: Memoir[];
+  number: number;
+  sort: Sort;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
+export interface ApiResponse<T> {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: T;
+  success: boolean;
 }
 
 export interface CreateMemoirRequest {
