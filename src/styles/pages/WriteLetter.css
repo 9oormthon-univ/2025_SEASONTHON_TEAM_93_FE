@@ -108,12 +108,84 @@
   border-radius: 8px;
   padding: 1rem;
   transition: all 0.2s ease;
-  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
+}
+
+.card-content-area {
+  flex: 1;
+  cursor: pointer;
+}
+
+/* 편지 액션 버튼들 */
+.letter-actions {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-letter-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.edit-letter-button:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.edit-letter-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.delete-letter-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.delete-letter-button:hover:not(:disabled) {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.delete-letter-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .project-title {
@@ -185,6 +257,120 @@
   font-size: 0.8rem;
   color: #9ca3af;
   text-align: right;
+}
+
+.updated-indicator {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* 편지 수정 폼 */
+.edit-letter-form {
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+}
+
+.edit-title-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.edit-title-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-title-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.edit-content-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  background-color: white;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.edit-content-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-content-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.edit-letter-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.save-edit-button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-edit-button:hover:not(:disabled) {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.save-edit-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancel-edit-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-edit-button:hover:not(:disabled) {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+.cancel-edit-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .volunteer-avatars {
@@ -408,5 +594,188 @@
 
   .project-card {
     padding: 1.5rem;
+  }
+}
+
+/* 편지 삭제 모달 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.delete-modal {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 450px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.modal-content p {
+  color: #374151;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.letter-preview {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.letter-preview strong {
+  display: block;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.letter-preview p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.letter-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.letter-meta span {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.warning-text {
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 1rem 0 0 0 !important;
+}
+
+.modal-actions {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.cancel-delete-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.cancel-delete-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.cancel-delete-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.confirm-delete-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.confirm-delete-button:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.confirm-delete-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* 모바일에서 모달 반응형 */
+@media (max-width: 639px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .delete-modal {
+    max-width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cancel-delete-button,
+  .confirm-delete-button {
+    width: 100%;
+    padding: 0.875rem;
+  }
+
+  .letter-meta {
+    gap: 0.125rem;
+  }
+
+  .delete-letter-button {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .edit-letter-button {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .edit-letter-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .save-edit-button,
+  .cancel-edit-button {
+    padding: 0.875rem;
+    width: 100%;
   }
 }

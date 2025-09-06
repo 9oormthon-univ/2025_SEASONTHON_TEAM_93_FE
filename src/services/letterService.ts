@@ -1,4 +1,5 @@
 import api from './axiosConfig';
+import type { ApiResponse } from '../types/api/common';
 import type {
   LetterData,
   Letter,
@@ -9,6 +10,8 @@ import type {
   LetterPageApiResponse,
   LetterCreateRequest,
   LetterCreateResponse,
+  LetterUpdateRequest,
+  LetterUpdateResponse,
   HeroResponse,
   HeroListResponse,
 } from '../types/api';
@@ -75,13 +78,25 @@ export const letterService = {
     }
   },
 
-  // 편지 삭제
-  deleteLetter: async (id: number): Promise<void> => {
-    try {
-      await api.delete(`/api/letters/${id}`);
-    } catch (error) {
-      throw error;
-    }
+  // 편지 수정 (인증 필요)
+  updateLetter: async (
+    letterId: number,
+    letterData: LetterUpdateRequest
+  ): Promise<LetterUpdateResponse> => {
+    const response = await api.put<LetterUpdateResponse>(
+      `/letters/${letterId}`,
+      letterData
+    );
+    return response.data;
+  },
+
+  // 편지 삭제 (인증 필요)
+  deleteLetter: async (letterId: number): Promise<ApiResponse<string>> => {
+    const response = await api.delete<ApiResponse<string>>(
+      `/letters/${letterId}`
+    );
+    
+    return response.data;
   },
 
   // 영웅 목록 조회

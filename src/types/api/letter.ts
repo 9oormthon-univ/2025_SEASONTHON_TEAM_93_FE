@@ -54,6 +54,12 @@ export interface LetterCreateRequest {
   warMemoirId: number;
 }
 
+export interface LetterUpdateRequest {
+  title: string;
+  content: string;
+  warMemoirId: number;
+}
+
 // 편지 작성자 정보 (API 응답)
 export interface LetterAuthor {
   id: number;
@@ -121,5 +127,6 @@ export type LetterResponse = ApiResponse<Letter>;
 export type LetterListResponse = ApiResponse<Letter[]>;
 export type LetterPageApiResponse = ApiResponse<LetterPageResponse>;
 export type LetterCreateResponse = ApiResponse<LetterDetail>;
+export type LetterUpdateResponse = ApiResponse<LetterDetail>;
 export type HeroResponse = ApiResponse<Hero>;
 export type HeroListResponse = ApiResponse<Hero[]>;
