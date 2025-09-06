@@ -116,6 +116,8 @@ const WarMemoir = () => {
       try {
         setLoading(true);
         setError(null);
+        
+        // 프록시를 통한 실제 API 호출
         const response = await memoirService.getMemoirs(currentPage, itemsPerPage);
         
         if (response.isSuccess && response.result) {
@@ -124,11 +126,16 @@ const WarMemoir = () => {
         } else {
           setError('데이터를 불러오는데 실패했습니다.');
         }
+        
       } catch (err) {
         console.error('회고록 조회 실패:', err);
         setError('서버 연결에 실패했습니다.');
         // 에러 시 샘플 데이터 사용
-        setMemoirs(sampleMemoirs.slice(0, itemsPerPage));
+        const startIndex = currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = sampleMemoirs.slice(startIndex, endIndex);
+        
+        setMemoirs(pageData);
         setTotalPages(Math.ceil(sampleMemoirs.length / itemsPerPage));
       } finally {
         setLoading(false);

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 기본 axios 인스턴스 생성
 const api = axios.create({
-  baseURL: 'https://warhero.site', // 백엔드 서버 주소
+  baseURL: '/api', // Vite 프록시를 통해 백엔드에 접근
   timeout: 10000, // 10초 타임아웃
   headers: {
     'Content-Type': 'application/json',

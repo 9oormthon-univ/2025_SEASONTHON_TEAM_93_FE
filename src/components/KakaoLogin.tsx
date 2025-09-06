@@ -1,9 +1,27 @@
 import './KakaoLogin.css';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const KakaoLogin = () => {
+  const navigate = useNavigate();
+
+  // URL 파라미터에서 로그인 성공 여부 확인
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loginSuccess = urlParams.get('login');
+    
+    if (loginSuccess === 'success') {
+      // 로그인 성공 시 WarMemoir 페이지로 리다이렉트
+      navigate('/home');
+    }
+  }, [navigate]);
+
   const loginWithKakao = () => {
-    // Spring Security OAuth2 Authorization 엔드포인트로 직접 리다이렉트
-    window.location.href = 'https://warhero.site/oauth2/authorization/kakao';
+    // 개발용: 바로 WarMemoir 페이지로 이동
+    navigate('/home');
+    
+    // 실제 로그인 (주석 처리)
+    // window.location.href = 'https://warhero.site/oauth2/authorization/kakao';
   };
 
   return (

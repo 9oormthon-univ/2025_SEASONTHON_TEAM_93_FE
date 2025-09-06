@@ -98,7 +98,10 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <a href='#' className='nav-link'>
+              <Link 
+                to='/mypage' 
+                className={`nav-link ${location.pathname === '/mypage' ? 'nav-link-highlighted' : ''}`}
+              >
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -110,7 +113,7 @@ const Header = () => {
                   <circle cx='12' cy='7' r='4' />
                 </svg>
                 마이페이지
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
