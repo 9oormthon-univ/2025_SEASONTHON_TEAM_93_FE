@@ -2,7 +2,16 @@ import './WarMemoir.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { memoirService } from '../api';
-import { Memoir, ApiResponse, MemoirPageResponse } from '../types/api';
+
+// 타입 정의
+interface Memoir {
+  id: number;
+  title: string;
+  image: string;
+  createdAt: string;
+  replyCount: number;
+  sectionCount: number;
+}
 
 // 샘플 데이터
 const sampleMemoirs = [

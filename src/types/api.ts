@@ -1,18 +1,10 @@
 // API 응답 타입 정의
 export interface ApiResponse<T> {
-  data: T;
+  isSuccess: boolean;
+  code: string;
   message: string;
-  status: number;
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
+  result: T;
+  success: boolean;
 }
 
 // 인증 관련 타입
@@ -71,14 +63,6 @@ export interface MemoirPageResponse {
   first: boolean;
   last: boolean;
   empty: boolean;
-}
-
-export interface ApiResponse<T> {
-  isSuccess: boolean;
-  code: string;
-  message: string;
-  result: T;
-  success: boolean;
 }
 
 export interface CreateMemoirRequest {

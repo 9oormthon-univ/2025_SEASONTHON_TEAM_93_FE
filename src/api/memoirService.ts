@@ -1,5 +1,55 @@
 import api from './axiosConfig';
-import { ApiResponse, MemoirPageResponse } from '../types/api';
+
+// 타입 정의를 직접 import
+interface ApiResponse<T> {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: T;
+  success: boolean;
+}
+
+interface Memoir {
+  id: number;
+  title: string;
+  image: string;
+  createdAt: string;
+  replyCount: number;
+  sectionCount: number;
+}
+
+interface Pageable {
+  unpaged: boolean;
+  paged: boolean;
+  pageNumber: number;
+  pageSize: number;
+  offset: number;
+  sort: {
+    unsorted: boolean;
+    sorted: boolean;
+    empty: boolean;
+  };
+}
+
+interface Sort {
+  unsorted: boolean;
+  sorted: boolean;
+  empty: boolean;
+}
+
+interface MemoirPageResponse {
+  totalPages: number;
+  totalElements: number;
+  pageable: Pageable;
+  numberOfElements: number;
+  size: number;
+  content: Memoir[];
+  number: number;
+  sort: Sort;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
 
 // 회고록 관련 API 서비스
 export const memoirService = {
