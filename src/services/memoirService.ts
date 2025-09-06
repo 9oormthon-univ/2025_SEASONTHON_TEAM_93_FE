@@ -26,7 +26,6 @@ export const memoirService = {
       });
       return response.data;
     } catch (error) {
-      console.error('회고록 목록 조회 실패:', error);
       throw error;
     }
   },
@@ -37,7 +36,6 @@ export const memoirService = {
       const response = await api.get<MemoirDetailResponse>(`/warmemoir/${id}`);
       return response.data;
     } catch (error) {
-      console.error('회고록 상세 조회 실패:', error);
       throw error;
     }
   },
@@ -50,7 +48,6 @@ export const memoirService = {
       const response = await api.post('/warmemoir', memoirData);
       return response.data;
     } catch (error) {
-      console.error('회고록 생성 실패:', error);
       throw error;
     }
   },
@@ -64,7 +61,6 @@ export const memoirService = {
       const response = await api.put(`/warmemoir/${id}`, memoirData);
       return response.data;
     } catch (error) {
-      console.error('회고록 수정 실패:', error);
       throw error;
     }
   },
@@ -74,7 +70,6 @@ export const memoirService = {
     try {
       await api.delete(`/warmemoir/${id}`);
     } catch (error) {
-      console.error('회고록 삭제 실패:', error);
       throw error;
     }
   },

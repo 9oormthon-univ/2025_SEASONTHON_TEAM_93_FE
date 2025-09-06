@@ -1,0 +1,436 @@
+/* 후원 상세 페이지 */
+.donation-detail-page {
+  padding: 2rem 0;
+  margin-top: 120px; /* 헤더 높이만큼 여백 */
+  min-height: calc(100vh - 120px);
+  background-color: #ffffff;
+}
+
+.donation-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 로딩 및 에러 상태 */
+.donation-detail-loading,
+.donation-detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.loading-spinner {
+  font-size: 1.1rem;
+  color: #6b7280;
+}
+
+.donation-detail-error h2 {
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+/* 헤더 영역 */
+.detail-header {
+  margin-bottom: 1.5rem;
+}
+
+.back-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+/* 제목 */
+.detail-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  margin: 2rem 0;
+  line-height: 1.2;
+}
+
+/* 이미지 갤러리 */
+.image-gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  height: 400px;
+}
+
+.main-image {
+  grid-row: 1 / -1;
+}
+
+.sub-images {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.image-placeholder {
+  background-color: #e5e7eb;
+  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.main-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.sub-placeholder {
+  height: calc(50% - 0.5rem);
+}
+
+/* 소셜 공유 버튼 */
+.social-share {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.social-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  min-width: 80px;
+}
+
+.facebook-btn {
+  background-color: #3b5998;
+}
+
+.facebook-btn:hover {
+  background-color: #2d4373;
+}
+
+.twitter-btn {
+  background-color: #1da1f2;
+}
+
+.twitter-btn:hover {
+  background-color: #0d8bd9;
+}
+
+.pinterest-btn {
+  background-color: #bd081c;
+}
+
+.pinterest-btn:hover {
+  background-color: #8c0615;
+}
+
+.email-btn {
+  background-color: #6b7280;
+}
+
+.email-btn:hover {
+  background-color: #4b5563;
+}
+
+/* 상세 내용 */
+.detail-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.content-text {
+  line-height: 1.8;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.content-text p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.content-sidebar {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+}
+
+.sidebar-image-placeholder {
+  background-color: #e5e7eb;
+  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 8px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* 후원하기 메인 버튼 */
+.donate-action {
+  text-align: center;
+  margin: 3rem 0;
+  padding: 2rem 0;
+  background-color: #f8fafc;
+  border-radius: 12px;
+}
+
+.donate-main-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.donate-main-button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.donate-main-button:active {
+  transform: translateY(0);
+}
+
+/* 추가 정보 */
+.additional-info {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.info-value {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* 반응형 디자인 - 모바일 퍼스트 */
+@media (max-width: 767px) {
+  .donation-detail-page {
+    padding: 1rem 0;
+    margin-top: 100px;
+  }
+
+  .donation-detail-container {
+    padding: 0 0.75rem;
+  }
+
+  .detail-title {
+    font-size: 1.8rem;
+    margin: 1.5rem 0;
+  }
+
+  .image-gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: 250px 100px;
+    height: auto;
+    gap: 0.75rem;
+  }
+
+  .sub-images {
+    grid-column: 1;
+    flex-direction: row;
+    height: 100px;
+  }
+
+  .sub-placeholder {
+    height: 100%;
+    width: calc(50% - 0.375rem);
+  }
+
+  .social-share {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .social-btn {
+    flex: 1;
+    min-width: calc(50% - 0.375rem);
+  }
+
+  .detail-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .content-sidebar {
+    position: static;
+    order: -1;
+  }
+
+  .sidebar-image-placeholder {
+    height: 200px;
+  }
+
+  .donate-main-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .additional-info {
+    padding: 1.5rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .donation-detail-page {
+    margin-top: 110px;
+  }
+
+  .donation-detail-container {
+    padding: 0 1.5rem;
+  }
+
+  .detail-title {
+    font-size: 2.2rem;
+  }
+
+  .image-gallery {
+    height: 350px;
+  }
+
+  .social-share {
+    gap: 0.75rem;
+  }
+
+  .detail-content {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .donation-detail-page {
+    margin-top: 120px;
+    padding: 2.5rem 0;
+  }
+
+  .donation-detail-container {
+    padding: 0 2rem;
+  }
+
+  .detail-title {
+    font-size: 2.8rem;
+  }
+
+  .image-gallery {
+    height: 450px;
+  }
+
+  .detail-content {
+    gap: 2.5rem;
+  }
+
+  .additional-info {
+    padding: 2.5rem;
+  }
+}
+
+/* 호버 효과 개선 */
+@media (hover: hover) {
+  .image-placeholder:hover {
+    background-image: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  }
+  
+  .back-button:hover {
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+  }
+}
+
+/* 접근성 개선 */
+.back-button:focus,
+.donate-main-button:focus,
+.social-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* 인쇄 스타일 */
+@media print {
+  .donation-detail-page {
+    margin-top: 0;
+    padding: 0;
+  }
+  
+  .back-button,
+  .social-share,
+  .donate-action {
+    display: none;
+  }
+  
+  .detail-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-image-placeholder {
+    display: none;
+  }
+}

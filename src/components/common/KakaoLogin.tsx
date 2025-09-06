@@ -5,23 +5,17 @@ import { useNavigate } from 'react-router-dom';
 const KakaoLogin = () => {
   const navigate = useNavigate();
 
-  // URL 파라미터에서 로그인 성공 여부 확인
+  // 이미 로그인된 사용자라면 홈으로 리다이렉트
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const loginSuccess = urlParams.get('login');
-
-    if (loginSuccess === 'success') {
-      // 로그인 성공 시 홈화면으로 리다이렉트
-      navigate('/');
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 
   const loginWithKakao = () => {
-    // 개발용: 바로 홈화면으로 이동
-    navigate('/');
-
-    // 실제 로그인 (주석 처리)
-    // window.location.href = 'https://warhero.site/oauth2/authorization/kakao';
+    // 카카오 OAuth2 로그인으로 리다이렉트
+    window.location.href = 'https://warhero.site/oauth2/authorization/kakao';
   };
 
   return (

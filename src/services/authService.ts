@@ -16,7 +16,6 @@ export const authService = {
       const response = await api.get('/api/auth/me');
       return response.data;
     } catch (error) {
-      console.error('인증 확인 실패:', error);
       throw error;
     }
   },
@@ -27,7 +26,6 @@ export const authService = {
       const response = await api.post('/api/auth/login', loginData);
       return response.data;
     } catch (error) {
-      console.error('로그인 실패:', error);
       throw error;
     }
   },
@@ -38,7 +36,6 @@ export const authService = {
       const response = await api.post('/api/auth/signup', signupData);
       return response.data;
     } catch (error) {
-      console.error('회원가입 실패:', error);
       throw error;
     }
   },
@@ -49,13 +46,16 @@ export const authService = {
       await api.post('/api/auth/logout');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      window.location.href = '/';
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+      window.location.href = '/login';
     } catch (error) {
-      console.error('로그아웃 실패:', error);
       // 에러가 있어도 로컬 스토리지는 정리
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      window.location.href = '/';
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+      window.location.href = '/login';
     }
   },
 
@@ -80,10 +80,11 @@ export const authService = {
 
       return accessToken;
     } catch (error) {
-      console.error('토큰 갱신 실패:', error);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      window.location.href = '/';
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+      window.location.href = '/login';
       throw error;
     }
   },

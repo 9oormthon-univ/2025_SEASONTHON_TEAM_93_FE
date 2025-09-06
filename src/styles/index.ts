@@ -3,6 +3,8 @@ import './layout/Header.css';
 import './components/KakaoLogin.css';
 import './components/MainSection.css';
 import './components/Footer.css';
+import './components/AuthGuard.css';
+import './components/LoginSuccess.css';
 import './pages/Home.css';
 import './pages/Donation.css';
 import './pages/WarMemoir.css';

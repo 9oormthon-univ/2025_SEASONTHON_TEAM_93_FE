@@ -1,31 +1,46 @@
 import api from './axiosConfig';
+import type { ApiResponse } from '../types/api/common';
 import type {
   LetterData,
   Letter,
   Hero,
   LetterResponse,
   LetterListResponse,
+  LetterPageRequest,
+  LetterPageApiResponse,
+  LetterCreateRequest,
+  LetterCreateResponse,
+  LetterUpdateRequest,
+  LetterUpdateResponse,
   HeroResponse,
   HeroListResponse,
 } from '../types/api';
 
 // 편지 관련 API 서비스
 export const letterService = {
-  // 편지 목록 조회 (영웅별)
+  // 전체 편지 목록 조회 (페이지네이션)
   getLetters: async (
-    heroId: number,
-    page: number = 0,
-    size: number = 8
-  ): Promise<LetterListResponse> => {
-    try {
-      const response = await api.get(`/api/letters/hero/${heroId}`, {
-        params: { page, size },
+    pageRequest: LetterPageRequest
+  ): Promise<LetterPageApiResponse> => {
+    const { page, size, sort } = pageRequest;
+    
+    const params = new URLSearchParams({
+      page: page.toString(),
+      size: size.toString(),
+    });
+
+    // sort 배열이 있으면 추가
+    if (sort && sort.length > 0) {
+      sort.forEach(sortItem => {
+        params.append('sort', sortItem);
       });
-      return response.data;
-    } catch (error) {
-      console.error('편지 목록 조회 실패:', error);
-      throw error;
     }
+
+    const response = await api.get<LetterPageApiResponse>(
+      `/letters?${params.toString()}`
+    );
+    
+    return response.data;
   },
 
   // 편지 상세 조회
@@ -34,44 +49,41 @@ export const letterService = {
       const response = await api.get(`/api/letters/${id}`);
       return response.data;
     } catch (error) {
-      console.error('편지 상세 조회 실패:', error);
       throw error;
     }
   },
 
-  // 편지 작성
-  createLetter: async (letterData: LetterData): Promise<LetterResponse> => {
-    try {
-      const response = await api.post('/api/letters', letterData);
-      return response.data;
-    } catch (error) {
-      console.error('편지 작성 실패:', error);
-      throw error;
-    }
+  // 편지 작성 (인증 필요)
+  createLetter: async (
+    letterData: LetterCreateRequest
+  ): Promise<LetterCreateResponse> => {
+    const response = await api.post<LetterCreateResponse>(
+      '/letters',
+      letterData
+    );
+    
+    return response.data;
   },
 
-  // 편지 수정
+  // 편지 수정 (인증 필요)
   updateLetter: async (
-    id: number,
-    letterData: Partial<LetterData>
-  ): Promise<LetterResponse> => {
-    try {
-      const response = await api.put(`/api/letters/${id}`, letterData);
-      return response.data;
-    } catch (error) {
-      console.error('편지 수정 실패:', error);
-      throw error;
-    }
+    letterId: number,
+    letterData: LetterUpdateRequest
+  ): Promise<LetterUpdateResponse> => {
+    const response = await api.put<LetterUpdateResponse>(
+      `/letters/${letterId}`,
+      letterData
+    );
+    return response.data;
   },
 
-  // 편지 삭제
-  deleteLetter: async (id: number): Promise<void> => {
-    try {
-      await api.delete(`/api/letters/${id}`);
-    } catch (error) {
-      console.error('편지 삭제 실패:', error);
-      throw error;
-    }
+  // 편지 삭제 (인증 필요)
+  deleteLetter: async (letterId: number): Promise<ApiResponse<string>> => {
+    const response = await api.delete<ApiResponse<string>>(
+      `/letters/${letterId}`
+    );
+    
+    return response.data;
   },
 
   // 영웅 목록 조회
@@ -85,7 +97,6 @@ export const letterService = {
       });
       return response.data;
     } catch (error) {
-      console.error('영웅 목록 조회 실패:', error);
       throw error;
     }
   },
@@ -96,7 +107,6 @@ export const letterService = {
       const response = await api.get(`/api/heroes/${id}`);
       return response.data;
     } catch (error) {
-      console.error('영웅 상세 조회 실패:', error);
       throw error;
     }
   },

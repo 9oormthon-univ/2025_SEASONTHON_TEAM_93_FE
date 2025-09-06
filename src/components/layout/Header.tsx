@@ -1,8 +1,27 @@
 import '../../styles/layout/Header.css';
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const Header = () => {
   const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const email = localStorage.getItem('userEmail');
+    setIsLoggedIn(!!token);
+    setUserEmail(email || '');
+  }, [location]); // location이 변경될 때마다 확인
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
+    window.location.href = '/login';
+  };
   return (
     <header className='header'>
       <div className='header-container'>
@@ -123,6 +142,22 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+        
+        {/* 로그인/로그아웃 영역 */}
+        <div className='auth-section'>
+          {isLoggedIn ? (
+            <div className='user-info'>
+              <span className='user-email'>{userEmail}</span>
+              <button className='logout-btn' onClick={handleLogout}>
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <Link to='/login' className='login-btn'>
+              로그인
+            </Link>
+          )}
+        </div>
       </div>
       <div className='header-message'>
         <p>"영웅에게 전하는 우리의 마음"</p>

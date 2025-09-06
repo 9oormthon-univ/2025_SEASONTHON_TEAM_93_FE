@@ -103,9 +103,16 @@
   transition: all 0.2s ease;
 }
 
-.btn-back:hover {
+.btn-back:hover:not(:disabled) {
   background-color: #f3f4f6;
   border-color: #9ca3af;
+}
+
+.btn-back:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+  border-color: #d1d5db;
 }
 
 .btn-send {
@@ -123,9 +130,16 @@
   transition: all 0.2s ease;
 }
 
-.btn-send:hover {
+.btn-send:hover:not(:disabled) {
   background-color: #2563eb;
   transform: translateY(-1px);
+}
+
+.btn-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #9ca3af;
+  transform: none;
 }
 
 .send-icon {

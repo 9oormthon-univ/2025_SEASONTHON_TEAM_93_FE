@@ -2,4 +2,5 @@
 export { memoirService } from './memoirService';
 export { letterService } from './letterService';
 export { authService } from './authService';
+export { replyService } from './replyService';
 export { default as api } from './axiosConfig';

@@ -1,7 +1,8 @@
 import '../../styles/pages/WarMemoirDetail.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { memoirService } from '../../services';
+import { memoirService, replyService } from '../../services';
+import type { ReplyCreateRequest, Reply } from '../../types/api/reply';
 
 // 타입 정의 (memoirService와 동일)
 interface MemoirSection {
@@ -27,6 +28,30 @@ const WarMemoirDetail = () => {
   const [memoir, setMemoir] = useState<MemoirDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // 댓글 관련 상태
+  const [replies, setReplies] = useState<Reply[]>([]);
+  const [repliesLoading, setRepliesLoading] = useState(false);
+  const [repliesError, setRepliesError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [hasMoreReplies, setHasMoreReplies] = useState(true);
+  
+  // 댓글 작성 관련 상태
+  const [replyTitle, setReplyTitle] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+  const [submittingReply, setSubmittingReply] = useState(false);
+  
+  // 댓글 수정 관련 상태
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [updatingReply, setUpdatingReply] = useState(false);
+  
+  // 댓글 삭제 관련 상태
+  const [deletingReplyId, setDeletingReplyId] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [replyToDelete, setReplyToDelete] = useState<Reply | null>(null);
 
   useEffect(() => {
     const fetchMemoirDetail = async () => {
@@ -47,40 +72,7 @@ const WarMemoirDetail = () => {
           setError('회고록을 불러오는데 실패했습니다.');
         }
       } catch (err) {
-        console.error('회고록 상세 조회 실패:', err);
         setError('서버 연결에 실패했습니다.');
-        // 에러 시 샘플 데이터 사용
-        setMemoir({
-          id: parseInt(id),
-          title: '6.25 전쟁의 기억',
-          image: 'https://via.placeholder.com/800x400?text=6.25+전쟁의+기억',
-          createdAt: '2025-08-30T00:00:00.000Z',
-          updatedAt: '2025-08-30T00:00:00.000Z',
-          sections: [
-            {
-              id: 1,
-              sectionOrder: 1,
-              title: '입대 과정',
-              content:
-                '1950년 6월, 갑작스러운 전쟁 소식을 듣고 입대하게 되었습니다. 당시 나는 20세의 젊은 병사였고, 갑작스러운 전쟁 소식에 충격을 받았습니다. 가족들과의 이별은 너무나 아쉬웠지만, 나라를 지키는 것이 우선이라고 생각했습니다.',
-            },
-            {
-              id: 2,
-              sectionOrder: 2,
-              title: '전쟁터에서의 첫날',
-              content:
-                '전쟁터에 도착한 첫날의 기억은 지금도 생생합니다. 포성과 총성이 끊이지 않았고, 동료들의 얼굴에는 긴장감이 가득했습니다. 하지만 우리는 끝까지 싸울 것을 다짐했습니다.',
-            },
-            {
-              id: 3,
-              sectionOrder: 3,
-              title: '동지들과의 우정',
-              content:
-                '전쟁터에서 만난 동지들과의 깊은 우정은 평생 잊지 못할 소중한 추억입니다. 함께 고생하며 나눈 이야기들, 서로를 격려하며 버텨낸 시간들이 있었기에 우리는 살아남을 수 있었습니다.',
-            },
-          ],
-          replyCount: 5,
-        });
       } finally {
         setLoading(false);
       }
@@ -88,6 +80,235 @@ const WarMemoirDetail = () => {
 
     fetchMemoirDetail();
   }, [id]);
+
+  // 댓글 목록 불러오기
+  const fetchReplies = async (page: number = 0, append: boolean = false) => {
+    if (!id) return;
+
+    try {
+      setRepliesLoading(true);
+      setRepliesError(null);
+
+      const pageRequest = {
+        page: page,
+        size: 10, // 한 번에 10개씩 로드
+        sort: ["createdAt,desc"] // 최신순 정렬
+      };
+
+      const response = await replyService.getReplies(parseInt(id), pageRequest);
+
+      if (response.isSuccess && response.result) {
+        const newReplies = response.result.content;
+        
+        if (append) {
+          setReplies(prev => [...prev, ...newReplies]);
+        } else {
+          setReplies(newReplies);
+        }
+        
+        setCurrentPage(page);
+        setTotalPages(response.result.totalPages);
+        setHasMoreReplies(page + 1 < response.result.totalPages);
+      } else {
+        setRepliesError('댓글을 불러오는데 실패했습니다.');
+      }
+    } catch (error) {
+      setRepliesError('댓글 로딩 중 오류가 발생했습니다.');
+    } finally {
+      setRepliesLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 첫 번째 댓글 페이지 로드
+  useEffect(() => {
+    if (memoir) {
+      fetchReplies(0, false);
+    }
+  }, [memoir]);
+
+  // 더 많은 댓글 로드
+  const loadMoreReplies = () => {
+    if (hasMoreReplies && !repliesLoading) {
+      fetchReplies(currentPage + 1, true);
+    }
+  };
+
+  // 댓글 작성자 권한 체크
+  const canEditReply = (reply: Reply): boolean => {
+    const userEmail = localStorage.getItem('userEmail');
+    return userEmail === reply.author.email;
+  };
+
+  // 댓글 수정 모드 시작
+  const startEditReply = (reply: Reply) => {
+    if (!canEditReply(reply)) {
+      alert('본인이 작성한 댓글만 수정할 수 있습니다.');
+      return;
+    }
+    setEditingReplyId(reply.id);
+    setEditTitle(reply.title);
+    setEditContent(reply.content);
+  };
+
+  // 댓글 수정 취소
+  const cancelEditReply = () => {
+    setEditingReplyId(null);
+    setEditTitle('');
+    setEditContent('');
+  };
+
+  // 댓글 수정 제출
+  const handleEditReplySubmit = async (replyId: number) => {
+    if (!id || !editTitle.trim() || !editContent.trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setUpdatingReply(true);
+      
+      const replyData: ReplyCreateRequest = {
+        title: editTitle.trim(),
+        content: editContent.trim(),
+      };
+
+      const response = await replyService.updateReply(parseInt(id), replyId, replyData);
+      
+      if (response.isSuccess && response.result) {
+        alert('댓글이 성공적으로 수정되었습니다.');
+        
+        // 댓글 목록에서 해당 댓글 업데이트
+        setReplies(prevReplies => 
+          prevReplies.map(reply => 
+            reply.id === replyId ? response.result! : reply
+          )
+        );
+        
+        // 수정 모드 종료
+        cancelEditReply();
+      } else {
+        alert('댓글 수정에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 수정 중 오류가 발생했습니다.');
+    } finally {
+      setUpdatingReply(false);
+    }
+  };
+
+  // 댓글 삭제 모달 열기
+  const openDeleteModal = (reply: Reply) => {
+    if (!canEditReply(reply)) {
+      alert('본인이 작성한 댓글만 삭제할 수 있습니다.');
+      return;
+    }
+    setReplyToDelete(reply);
+    setShowDeleteModal(true);
+  };
+
+  // 댓글 삭제 모달 닫기
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setReplyToDelete(null);
+  };
+
+  // 댓글 삭제 확인
+  const handleDeleteReply = async () => {
+    if (!id || !replyToDelete) return;
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setDeletingReplyId(replyToDelete.id);
+      
+      const response = await replyService.deleteReply(parseInt(id), replyToDelete.id);
+      
+      if (response.isSuccess) {
+        alert('댓글이 성공적으로 삭제되었습니다.');
+        
+        // 댓글 목록에서 해당 댓글 제거
+        setReplies(prevReplies => 
+          prevReplies.filter(reply => reply.id !== replyToDelete.id)
+        );
+        
+        // 회고록 댓글 수 업데이트
+        if (memoir) {
+          setMemoir({...memoir, replyCount: memoir.replyCount - 1});
+        }
+        
+        // 모달 닫기
+        closeDeleteModal();
+      } else {
+        alert('댓글 삭제에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 삭제 중 오류가 발생했습니다.');
+    } finally {
+      setDeletingReplyId(null);
+    }
+  };
+
+  // 댓글 작성 핸들러
+  const handleReplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!id || !replyTitle.trim() || !replyContent.trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setSubmittingReply(true);
+      
+      const replyData: ReplyCreateRequest = {
+        title: replyTitle.trim(),
+        content: replyContent.trim(),
+      };
+
+      const response = await replyService.createReply(parseInt(id), replyData);
+      
+      if (response.isSuccess) {
+        alert('댓글이 성공적으로 작성되었습니다.');
+        // 입력 필드 초기화
+        setReplyTitle('');
+        setReplyContent('');
+        // 댓글 목록 새로고침 및 회고록 데이터 업데이트
+        fetchReplies(0, false);
+        // 회고록 댓글 수 업데이트를 위해 회고록 정보도 다시 로드
+        if (memoir) {
+          setMemoir({...memoir, replyCount: memoir.replyCount + 1});
+        }
+      } else {
+        alert('댓글 작성에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 작성 중 오류가 발생했습니다.');
+    } finally {
+      setSubmittingReply(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -123,7 +344,10 @@ const WarMemoirDetail = () => {
             ← 목록으로 돌아가기
           </button>
           <div className='header-actions'>
-            <button className='letter-button'>
+            <button 
+              className='letter-button'
+              onClick={() => navigate(`/write-detail/${id}`)}
+            >
               해당 영웅에게 바로 편지쓰기
             </button>
           </div>
@@ -167,78 +391,223 @@ const WarMemoirDetail = () => {
             ))}
         </div>
 
-        {/* 도움을 준 분들 섹션 */}
+        {/* 도움을 준 분들 섹션 - API 연동 필요 시 활성화 */}
+        {/* 
         <div className='helpers-section'>
           <h2 className='section-title'>도움을 준 분들</h2>
           <div className='helpers-grid'>
-            <div className='helper-card'>
-              <div className='helper-image'>
-                <div className='image-placeholder'>이미지</div>
-              </div>
-              <h3 className='helper-name'>김상담</h3>
-              <p className='helper-role'>심리상담가</p>
-            </div>
-            <div className='helper-card'>
-              <div className='helper-image'>
-                <div className='image-placeholder'>이미지</div>
-              </div>
-              <h3 className='helper-name'>이기록</h3>
-              <p className='helper-role'>기록 전문가</p>
-            </div>
-            <div className='helper-card'>
-              <div className='helper-image'>
-                <div className='image-placeholder'>이미지</div>
-              </div>
-              <h3 className='helper-name'>박편집</h3>
-              <p className='helper-role'>편집자</p>
-            </div>
+            // API에서 도움을 준 분들 데이터를 받아와서 렌더링
           </div>
         </div>
+        */}
 
         {/* 댓글 섹션 */}
         <div className='comments-section'>
           <h2 className='section-title'>댓글 ({memoir.replyCount}개)</h2>
 
-          {/* 기존 댓글들 */}
+          {/* 댓글 목록 */}
           <div className='comments-list'>
-            <div className='comment'>
-              <div className='comment-avatar'>
-                <div className='avatar-placeholder'>로고</div>
+            {repliesError && (
+              <div className='comments-error'>
+                <p>{repliesError}</p>
+                <button onClick={() => fetchReplies(0, false)} className='retry-button'>
+                  다시 시도
+                </button>
               </div>
-              <div className='comment-content'>
-                <h4 className='comment-title'>감동적인 이야기입니다</h4>
-                <p className='comment-meta'>김독자 | 2025.08.30</p>
-                <p className='comment-text'>
-                  영웅님의 이야기를 읽으며 많은 감동을 받았습니다. 평화의
-                  소중함을 다시 한번 깨닫게 되었습니다.
-                </p>
-              </div>
-            </div>
+            )}
+            
+            {replies.length === 0 && !repliesLoading && !repliesError && (
+              <p className='comments-placeholder'>
+                아직 댓글이 없습니다. 첫 댓글을 남겨보세요!
+              </p>
+            )}
 
-            <div className='comment'>
-              <div className='comment-avatar'>
-                <div className='avatar-placeholder'>로고</div>
+            {replies.map((reply) => (
+              <div key={reply.id} className='comment-item'>
+                <div className='comment-header'>
+                  <div className='comment-author'>
+                    <span className='author-name'>{reply.author.name}</span>
+                    <span className='author-email'>({reply.author.email})</span>
+                  </div>
+                  <div className='comment-meta-right'>
+                    <div className='comment-date'>
+                      {new Date(reply.createdAt).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'short', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </div>
+                    {canEditReply(reply) && editingReplyId !== reply.id && (
+                      <div className='reply-actions'>
+                        <button 
+                          onClick={() => startEditReply(reply)}
+                          className='edit-reply-button'
+                          disabled={updatingReply || deletingReplyId === reply.id}
+                        >
+                          수정
+                        </button>
+                        <button 
+                          onClick={() => openDeleteModal(reply)}
+                          className='delete-reply-button'
+                          disabled={updatingReply || deletingReplyId === reply.id}
+                        >
+                          {deletingReplyId === reply.id ? '삭제 중...' : '삭제'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {editingReplyId === reply.id ? (
+                  // 수정 모드 UI
+                  <div className='edit-reply-form'>
+                    <input
+                      type='text'
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className='edit-title-input'
+                      placeholder='댓글 제목을 입력해주세요.'
+                      disabled={updatingReply}
+                    />
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className='edit-content-input'
+                      placeholder='댓글 내용을 입력해주세요.'
+                      rows={4}
+                      disabled={updatingReply}
+                    />
+                    <div className='edit-reply-actions'>
+                      <button
+                        onClick={() => handleEditReplySubmit(reply.id)}
+                        className='save-edit-button'
+                        disabled={updatingReply || !editTitle.trim() || !editContent.trim()}
+                      >
+                        {updatingReply ? '수정 중...' : '수정 완료'}
+                      </button>
+                      <button
+                        onClick={cancelEditReply}
+                        className='cancel-edit-button'
+                        disabled={updatingReply}
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // 일반 표시 모드 UI
+                  <>
+                    <h4 className='comment-title'>{reply.title}</h4>
+                    <div className='comment-content'>
+                      {reply.content.split('\n').map((line, index) => (
+                        <p key={index}>{line}</p>
+                      ))}
+                    </div>
+                    {reply.updatedAt !== reply.createdAt && (
+                      <div className='comment-updated'>
+                        수정됨: {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-              <div className='comment-content'>
-                <h4 className='comment-title'>고맙습니다</h4>
-                <p className='comment-meta'>이감사 | 2025.08.29</p>
-                <p className='comment-text'>
-                  우리나라를 위해 희생해주신 모든 분들께 감사드립니다.
-                  후세들에게 이런 이야기들이 전해져야 합니다.
-                </p>
+            ))}
+
+            {/* 더 보기 버튼 */}
+            {hasMoreReplies && (
+              <div className='load-more-container'>
+                <button 
+                  onClick={loadMoreReplies}
+                  disabled={repliesLoading}
+                  className='load-more-button'
+                >
+                  {repliesLoading ? '댓글 로딩 중...' : `더 많은 댓글 보기 (${currentPage + 1}/${totalPages})`}
+                </button>
               </div>
-            </div>
+            )}
+
+            {repliesLoading && replies.length === 0 && (
+              <div className='comments-loading'>
+                <p>댓글을 불러오는 중...</p>
+              </div>
+            )}
           </div>
 
-          {/* 댓글 입력 */}
-          <div className='comment-form'>
-            <textarea
-              placeholder='댓글을 입력해주세요.'
-              className='comment-input'
+          {/* 댓글 입력 폼 */}
+          <form className='comment-form' onSubmit={handleReplySubmit}>
+            <input
+              type='text'
+              placeholder='댓글 제목을 입력해주세요.'
+              className='comment-title-input'
+              value={replyTitle}
+              onChange={(e) => setReplyTitle(e.target.value)}
+              disabled={submittingReply}
+              required
             />
-            <button className='comment-submit'>댓글 등록하기</button>
-          </div>
+            <textarea
+              placeholder='댓글 내용을 입력해주세요.'
+              className='comment-input'
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              disabled={submittingReply}
+              rows={4}
+              required
+            />
+            <button 
+              type='submit'
+              className='comment-submit'
+              disabled={submittingReply || !replyTitle.trim() || !replyContent.trim()}
+            >
+              {submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
+            </button>
+          </form>
         </div>
+
+        {/* 댓글 삭제 확인 모달 */}
+        {showDeleteModal && replyToDelete && (
+          <div className='modal-overlay' onClick={closeDeleteModal}>
+            <div className='delete-modal' onClick={(e) => e.stopPropagation()}>
+              <div className='modal-header'>
+                <h3>댓글 삭제</h3>
+              </div>
+              <div className='modal-content'>
+                <p>정말로 이 댓글을 삭제하시겠습니까?</p>
+                <div className='reply-preview'>
+                  <strong>"{replyToDelete.title}"</strong>
+                  <p>{replyToDelete.content.length > 50 
+                    ? replyToDelete.content.substring(0, 50) + '...' 
+                    : replyToDelete.content}
+                  </p>
+                </div>
+                <p className='warning-text'>삭제된 댓글은 복구할 수 없습니다.</p>
+              </div>
+              <div className='modal-actions'>
+                <button 
+                  onClick={closeDeleteModal}
+                  className='cancel-delete-button'
+                  disabled={deletingReplyId === replyToDelete.id}
+                >
+                  취소
+                </button>
+                <button 
+                  onClick={handleDeleteReply}
+                  className='confirm-delete-button'
+                  disabled={deletingReplyId === replyToDelete.id}
+                >
+                  {deletingReplyId === replyToDelete.id ? '삭제 중...' : '삭제하기'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

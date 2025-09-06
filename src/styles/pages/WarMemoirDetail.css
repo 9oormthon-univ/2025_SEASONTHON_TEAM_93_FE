@@ -243,6 +243,442 @@
   margin-bottom: 2rem;
 }
 
+/* 댓글 에러 및 로딩 상태 */
+.comments-error {
+  text-align: center;
+  padding: 2rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comments-error p {
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.retry-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background-color: #b91c1c;
+}
+
+.comments-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.comments-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+  font-style: italic;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* 개별 댓글 아이템 */
+.comment-item {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.comment-item:hover {
+  border-color: #d1d5db;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.comment-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+.author-email {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.comment-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.comment-content {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.comment-content p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+}
+
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+
+.comment-updated {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  font-style: italic;
+}
+
+/* 더 보기 버튼 */
+.load-more-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.load-more-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.load-more-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.load-more-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* 댓글 수정 관련 스타일 */
+.edit-reply-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.edit-reply-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.edit-reply-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.edit-reply-form {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.edit-title-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.edit-title-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-title-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.edit-content-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 0.75rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.edit-content-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-content-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.edit-reply-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.save-edit-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.save-edit-button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.save-edit-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.cancel-edit-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-edit-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.cancel-edit-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* 댓글 삭제 버튼 */
+.delete-reply-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.delete-reply-button:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.delete-reply-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* 삭제 확인 모달 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.delete-modal {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 400px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.modal-content p {
+  color: #374151;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.reply-preview {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.reply-preview strong {
+  display: block;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.reply-preview p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.warning-text {
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 1rem 0 0 0 !important;
+}
+
+.modal-actions {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.cancel-delete-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.cancel-delete-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.cancel-delete-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.confirm-delete-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+.confirm-delete-button:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.confirm-delete-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
 .comment {
   display: flex;
   gap: 1rem;
@@ -296,19 +732,40 @@
 /* 댓글 입력 폼 */
 .comment-form {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: flex-end;
+}
+
+.comment-title-input {
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.comment-title-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.comment-title-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
 }
 
 .comment-input {
-  flex: 1;
-  min-height: 80px;
-  padding: 0.75rem;
+  padding: 1rem;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  border-radius: 8px;
   font-family: inherit;
+  font-size: 1rem;
   resize: vertical;
+  min-height: 120px;
   transition: border-color 0.2s ease;
 }
 
@@ -316,6 +773,12 @@
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.comment-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
 }
 
 .comment-submit {
@@ -382,5 +845,99 @@
 
   .comment-submit {
     align-self: flex-end;
+  }
+
+  /* 모바일에서 댓글 반응형 */
+  .comment-item {
+    padding: 1rem;
+  }
+
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .comment-author {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+  }
+
+  .author-email {
+    font-size: 0.8rem;
+  }
+
+  .comment-title {
+    font-size: 1rem;
+  }
+
+  .comment-content p {
+    font-size: 0.9rem;
+  }
+
+  .load-more-button {
+    min-width: auto;
+    width: 100%;
+  }
+
+  /* 모바일에서 댓글 수정 관련 반응형 */
+  .comment-meta-right {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .reply-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+  }
+
+  .edit-reply-button,
+  .delete-reply-button {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+  }
+
+  .edit-reply-form {
+    padding: 0.75rem;
+  }
+
+  .edit-reply-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .save-edit-button,
+  .cancel-edit-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* 모바일에서 모달 반응형 */
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .delete-modal {
+    max-width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cancel-delete-button,
+  .confirm-delete-button {
+    width: 100%;
+    padding: 0.875rem;
   }
 }
