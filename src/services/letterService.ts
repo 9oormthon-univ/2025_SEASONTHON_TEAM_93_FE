@@ -5,26 +5,37 @@ import type {
   Hero,
   LetterResponse,
   LetterListResponse,
+  LetterPageRequest,
+  LetterPageApiResponse,
   HeroResponse,
   HeroListResponse,
 } from '../types/api';
 
 // 편지 관련 API 서비스
 export const letterService = {
-  // 편지 목록 조회 (영웅별)
+  // 전체 편지 목록 조회 (페이지네이션)
   getLetters: async (
-    heroId: number,
-    page: number = 0,
-    size: number = 8
-  ): Promise<LetterListResponse> => {
-    try {
-      const response = await api.get(`/api/letters/hero/${heroId}`, {
-        params: { page, size },
+    pageRequest: LetterPageRequest
+  ): Promise<LetterPageApiResponse> => {
+    const { page, size, sort } = pageRequest;
+    
+    const params = new URLSearchParams({
+      page: page.toString(),
+      size: size.toString(),
+    });
+
+    // sort 배열이 있으면 추가
+    if (sort && sort.length > 0) {
+      sort.forEach(sortItem => {
+        params.append('sort', sortItem);
       });
-      return response.data;
-    } catch (error) {
-      throw error;
     }
+
+    const response = await api.get<LetterPageApiResponse>(
+      `/letters?${params.toString()}`
+    );
+    
+    return response.data;
   },
 
   // 편지 상세 조회
