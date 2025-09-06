@@ -58,7 +58,7 @@
   gap: 0.75rem;
   width: 100%;
   padding: 1rem 1.5rem;
-  background-color: #FEE500;
+  background-color: #fee500;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
@@ -70,7 +70,7 @@
 }
 
 .kakao-login-btn:hover {
-  background-color: #FFEB3B;
+  background-color: #ffeb3b;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(254, 229, 0, 0.4);
 }

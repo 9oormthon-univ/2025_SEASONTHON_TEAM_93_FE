@@ -128,7 +128,8 @@
 }
 
 /* 로딩 및 에러 상태 */
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 3rem 1rem;
   font-size: 1.1rem;

@@ -11,7 +11,7 @@ const MyPage = () => {
       title: '편지 title',
       author: '작성자',
       date: 'January 11, 2024',
-      status: 'pending'
+      status: 'pending',
     },
     {
       id: 2,
@@ -19,7 +19,7 @@ const MyPage = () => {
       author: '작성자',
       date: 'January 11, 2024',
       status: 'delivered',
-      deliveryDate: '2025.08.30'
+      deliveryDate: '2025.08.30',
     },
     {
       id: 3,
@@ -27,7 +27,7 @@ const MyPage = () => {
       author: '작성자',
       date: 'January 11, 2024',
       status: 'delivered',
-      deliveryDate: '2025.08.30'
+      deliveryDate: '2025.08.30',
     },
     {
       id: 4,
@@ -35,8 +35,8 @@ const MyPage = () => {
       author: '작성자',
       date: 'January 11, 2024',
       status: 'delivered',
-      deliveryDate: '2025.08.30'
-    }
+      deliveryDate: '2025.08.30',
+    },
   ];
 
   const navigationItems = [
@@ -45,7 +45,7 @@ const MyPage = () => {
     '후원 현황',
     '정보 수정',
     '문의하기',
-    '증명서 발급'
+    '증명서 발급',
   ];
 
   const handleSectionChange = (section: string) => {
@@ -57,7 +57,7 @@ const MyPage = () => {
       <div className='content-container'>
         <div className='main-content'>
           <div className='content-list'>
-            {comments.map((comment) => (
+            {comments.map(comment => (
               <div key={comment.id} className='content-item'>
                 <div className='item-header'>
                   <h3 className='item-title'>{comment.title}</h3>
@@ -66,7 +66,7 @@ const MyPage = () => {
                     <span className='date'>{comment.date}</span>
                   </div>
                 </div>
-                
+
                 <div className='item-actions'>
                   {comment.status === 'pending' ? (
                     <div className='action-buttons'>
@@ -79,12 +79,18 @@ const MyPage = () => {
                     </div>
                   )}
                 </div>
-                
+
                 <div className='read-more'>
                   <a href='#' className='read-more-link'>
                     Read more
-                    <svg className='arrow-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
-                      <path d='M6 9l6 6 6-6'/>
+                    <svg
+                      className='arrow-icon'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                    >
+                      <path d='M6 9l6 6 6-6' />
                     </svg>
                   </a>
                 </div>
@@ -95,7 +101,7 @@ const MyPage = () => {
 
         <div className='sidebar'>
           <nav className='sidebar-nav'>
-            {navigationItems.map((item) => (
+            {navigationItems.map(item => (
               <div
                 key={item}
                 className={`nav-item ${activeSection === item ? 'active' : ''}`}

@@ -1,12 +1,23 @@
 import api from './axiosConfig';
 
+// 편지 데이터 타입 정의
+interface LetterData {
+  title: string;
+  content: string;
+  authorName: string;
+  authorEmail: string;
+  authorAddress?: string;
+  authorPhone?: string;
+  heroId: number;
+}
+
 // 편지 관련 API 서비스
 export const letterService = {
   // 편지 목록 조회 (영웅별)
   getLetters: async (heroId: number, page: number = 0, size: number = 8) => {
     try {
       const response = await api.get(`/api/letters/hero/${heroId}`, {
-        params: { page, size }
+        params: { page, size },
       });
       return response.data;
     } catch (error) {
@@ -27,7 +38,7 @@ export const letterService = {
   },
 
   // 편지 작성
-  createLetter: async (letterData: any) => {
+  createLetter: async (letterData: LetterData) => {
     try {
       const response = await api.post('/api/letters', letterData);
       return response.data;
@@ -38,7 +49,7 @@ export const letterService = {
   },
 
   // 편지 수정
-  updateLetter: async (id: number, letterData: any) => {
+  updateLetter: async (id: number, letterData: Partial<LetterData>) => {
     try {
       const response = await api.put(`/api/letters/${id}`, letterData);
       return response.data;
@@ -62,7 +73,7 @@ export const letterService = {
   getHeroes: async (page: number = 0, size: number = 8) => {
     try {
       const response = await api.get('/api/heroes', {
-        params: { page, size }
+        params: { page, size },
       });
       return response.data;
     } catch (error) {

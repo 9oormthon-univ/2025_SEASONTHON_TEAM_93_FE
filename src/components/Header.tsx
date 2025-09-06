@@ -60,8 +60,8 @@ const Header = () => {
               </a>
             </li>
             <li>
-              <Link 
-                to='/home' 
+              <Link
+                to='/home'
                 className={`nav-link ${location.pathname === '/home' || location.pathname.startsWith('/memoir/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
@@ -77,8 +77,8 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to='/write-letter' 
+              <Link
+                to='/write-letter'
                 className={`nav-link ${location.pathname === '/write-letter' || location.pathname.startsWith('/write-detail/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
@@ -98,8 +98,8 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to='/mypage' 
+              <Link
+                to='/mypage'
                 className={`nav-link ${location.pathname === '/mypage' ? 'nav-link-highlighted' : ''}`}
               >
                 <svg

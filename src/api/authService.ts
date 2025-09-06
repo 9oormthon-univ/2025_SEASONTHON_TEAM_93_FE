@@ -41,7 +41,10 @@ export const authService = {
         refreshToken,
       });
 
-      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      const { accessToken, refreshToken: newRefreshToken } = response.data as {
+        accessToken: string;
+        refreshToken: string;
+      };
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', newRefreshToken);
 

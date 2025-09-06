@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 const WriteDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -127,7 +127,11 @@ const WriteDetail = () => {
           </div>
 
           <div className='form-actions'>
-            <button type='button' className='btn-back' onClick={handleBackClick}>
+            <button
+              type='button'
+              className='btn-back'
+              onClick={handleBackClick}
+            >
               뒤로가기
             </button>
             <button type='submit' className='btn-send'>

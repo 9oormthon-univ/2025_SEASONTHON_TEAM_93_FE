@@ -11,16 +11,16 @@ const api = axios.create({
 
 // 요청 인터셉터 (요청 전에 실행)
 api.interceptors.request.use(
-  (config) => {
+  config => {
     // 로컬 스토리지에서 토큰 가져오기
     const token = localStorage.getItem('accessToken');
-    if (token) {
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     console.log('API 요청:', config);
     return config;
   },
-  (error) => {
+  error => {
     console.error('요청 에러:', error);
     return Promise.reject(error);
   }
@@ -28,13 +28,13 @@ api.interceptors.request.use(
 
 // 응답 인터셉터 (응답 후에 실행)
 api.interceptors.response.use(
-  (response) => {
+  response => {
     console.log('API 응답:', response);
     return response;
   },
-  (error) => {
+  error => {
     console.error('응답 에러:', error);
-    
+
     // 401 에러 시 토큰 만료 처리
     if (error.response?.status === 401) {
       localStorage.removeItem('accessToken');
@@ -42,7 +42,7 @@ api.interceptors.response.use(
       // 로그인 페이지로 리다이렉트
       window.location.href = '/';
     }
-    
+
     return Promise.reject(error);
   }
 );
