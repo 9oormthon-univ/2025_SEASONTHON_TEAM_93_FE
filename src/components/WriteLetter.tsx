@@ -8,49 +8,57 @@ const veteranProjects = [
     id: 1,
     title: '6.25 참전 용사 000',
     volunteers: 123,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 2,
     title: '6.25 참전 용사 001',
     volunteers: 89,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 3,
     title: '6.25 참전 용사 002',
     volunteers: 156,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 4,
     title: '6.25 참전 용사 003',
     volunteers: 234,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 5,
     title: '6.25 참전 용사 004',
     volunteers: 67,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 6,
     title: '6.25 참전 용사 005',
     volunteers: 178,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 7,
     title: '6.25 참전 용사 006',
     volunteers: 145,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
   {
     id: 8,
     title: '6.25 참전 용사 007',
     volunteers: 201,
-    description: 'A redesign of the company website to modernize the look and feel and improve user experience.',
+    description:
+      'A redesign of the company website to modernize the look and feel and improve user experience.',
   },
 ];
 
@@ -85,7 +93,7 @@ const WriteLetter = () => {
     // 이전 버튼
     buttons.push(
       <button
-        key="prev"
+        key='prev'
         className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -117,7 +125,7 @@ const WriteLetter = () => {
     // 다음 버튼
     buttons.push(
       <button
-        key="next"
+        key='next'
         className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
@@ -134,8 +142,8 @@ const WriteLetter = () => {
       <div className='content-container'>
         <div className='projects-grid'>
           {currentProjects.map(project => (
-            <div 
-              key={project.id} 
+            <div
+              key={project.id}
               className='project-card'
               onClick={() => handleCardClick(project.id)}
             >
@@ -146,7 +154,9 @@ const WriteLetter = () => {
                   <div className='avatar'></div>
                   <div className='avatar'></div>
                 </div>
-                <span className='volunteer-count'>+{project.volunteers} Volunteers</span>
+                <span className='volunteer-count'>
+                  +{project.volunteers} Volunteers
+                </span>
               </div>
               <p className='project-description'>{project.description}</p>
             </div>
@@ -154,9 +164,7 @@ const WriteLetter = () => {
         </div>
 
         {/* 페이지네이션 */}
-        <div className='pagination'>
-          {renderPaginationButtons()}
-        </div>
+        <div className='pagination'>{renderPaginationButtons()}</div>
       </div>
     </main>
   );

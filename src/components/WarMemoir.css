@@ -127,6 +127,23 @@
   transform: none;
 }
 
+/* 로딩 및 에러 상태 */
+.loading,
+.error {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-size: 1.1rem;
+  color: #6b7280;
+}
+
+.loading {
+  color: #3b82f6;
+}
+
+.error {
+  color: #ef4444;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
   .content-grid {

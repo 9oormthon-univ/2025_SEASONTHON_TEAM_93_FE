@@ -7,7 +7,7 @@ const Header = () => {
     <header className='header'>
       <div className='header-container'>
         <div className='logo'>
-          <Link to='/' className='logo-link'>
+          <Link to='/home' className='logo-link'>
             <svg
               className='logo-icon'
               viewBox='0 0 24 24'
@@ -31,7 +31,7 @@ const Header = () => {
         <nav className='nav'>
           <ul className='nav-list'>
             <li>
-              <Link to='/' className='nav-link'>
+              <Link to='/home' className='nav-link'>
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -60,9 +60,9 @@ const Header = () => {
               </a>
             </li>
             <li>
-              <Link 
-                to='/' 
-                className={`nav-link ${location.pathname === '/' || location.pathname.startsWith('/memoir/') ? 'nav-link-highlighted' : ''}`}
+              <Link
+                to='/home'
+                className={`nav-link ${location.pathname === '/home' || location.pathname.startsWith('/memoir/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
                   className='nav-icon'
@@ -77,8 +77,8 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to='/write-letter' 
+              <Link
+                to='/write-letter'
                 className={`nav-link ${location.pathname === '/write-letter' || location.pathname.startsWith('/write-detail/') ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
@@ -98,7 +98,10 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <a href='#' className='nav-link'>
+              <Link
+                to='/mypage'
+                className={`nav-link ${location.pathname === '/mypage' ? 'nav-link-highlighted' : ''}`}
+              >
                 <svg
                   className='nav-icon'
                   viewBox='0 0 24 24'
@@ -110,7 +113,7 @@ const Header = () => {
                   <circle cx='12' cy='7' r='4' />
                 </svg>
                 마이페이지
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

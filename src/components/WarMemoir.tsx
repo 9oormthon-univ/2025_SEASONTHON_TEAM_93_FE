@@ -1,110 +1,168 @@
 import './WarMemoir.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { memoirService } from '../api';
+
+// 타입 정의
+interface Memoir {
+  id: number;
+  title: string;
+  image: string;
+  createdAt: string;
+  replyCount: number;
+  sectionCount: number;
+}
 
 // 샘플 데이터
-const sampleMemoirs = [
+const sampleMemoirs: Memoir[] = [
   {
     id: 1,
     title: '6.25 전쟁의 기억',
-    date: '2025.08.30',
-    description:
-      '1950년 6월 25일, 북한의 남침으로 시작된 전쟁의 첫날을 기억합니다. 당시 나는 20세의 젊은 병사였고, 갑작스러운 전쟁 소식에 충격을 받았습니다.',
+    image: 'https://via.placeholder.com/300x200?text=6.25+전쟁의+기억',
+    createdAt: '2025-08-30T00:00:00.000Z',
+    replyCount: 15,
+    sectionCount: 3,
   },
   {
     id: 2,
     title: '인천상륙작전의 감동',
-    date: '2025.08.29',
-    description:
-      '맥아더 장군의 인천상륙작전이 성공했을 때의 감동을 잊을 수 없습니다. 전세가 역전되는 순간을 목격했습니다.',
+    image: 'https://via.placeholder.com/300x200?text=인천상륙작전',
+    createdAt: '2025-08-29T00:00:00.000Z',
+    replyCount: 23,
+    sectionCount: 5,
   },
   {
     id: 3,
     title: '동지들과의 우정',
-    date: '2025.08.28',
-    description:
-      '전쟁터에서 만난 동지들과의 깊은 우정은 평생 잊지 못할 소중한 추억입니다. 함께 고생하며 나눈 이야기들...',
+    image: 'https://via.placeholder.com/300x200?text=동지들과의+우정',
+    createdAt: '2025-08-28T00:00:00.000Z',
+    replyCount: 8,
+    sectionCount: 2,
   },
   {
     id: 4,
     title: '겨울의 추위',
-    date: '2025.08.27',
-    description:
-      '1950년 겨울의 혹독한 추위는 지금도 생생합니다. 얼어붙은 손발로도 끝까지 싸웠던 그날들을 기억합니다.',
+    image: 'https://via.placeholder.com/300x200?text=겨울의+추위',
+    createdAt: '2025-08-27T00:00:00.000Z',
+    replyCount: 12,
+    sectionCount: 4,
   },
   {
     id: 5,
     title: '고향에 대한 그리움',
-    date: '2025.08.26',
-    description:
-      '전쟁터에서 고향을 그리워하며 쓴 편지들. 가족들의 안부를 묻는 마음은 전쟁의 공포보다 더 컸습니다.',
+    image: 'https://via.placeholder.com/300x200?text=고향에+대한+그리움',
+    createdAt: '2025-08-26T00:00:00.000Z',
+    replyCount: 19,
+    sectionCount: 3,
   },
   {
     id: 6,
     title: '평화의 소중함',
-    date: '2025.08.25',
-    description:
-      '전쟁을 경험한 후에야 알게 된 평화의 소중함. 후세들에게는 절대 이런 일이 일어나지 않기를 바랍니다.',
+    image: 'https://via.placeholder.com/300x200?text=평화의+소중함',
+    createdAt: '2025-08-25T00:00:00.000Z',
+    replyCount: 31,
+    sectionCount: 6,
   },
   {
     id: 7,
     title: '휴전협정의 날',
-    date: '2025.08.24',
-    description:
-      '1953년 7월 27일, 휴전협정이 체결된 그날의 감정은 복잡했습니다. 기쁨과 아쉬움이 교차했습니다.',
+    image: 'https://via.placeholder.com/300x200?text=휴전협정의+날',
+    createdAt: '2025-08-24T00:00:00.000Z',
+    replyCount: 27,
+    sectionCount: 4,
   },
   {
     id: 8,
     title: '귀향길',
-    date: '2025.08.23',
-    description:
-      '전쟁이 끝나고 고향으로 돌아가는 길. 3년 만에 만나는 가족들의 모습은 잊을 수 없습니다.',
+    image: 'https://via.placeholder.com/300x200?text=귀향길',
+    createdAt: '2025-08-23T00:00:00.000Z',
+    replyCount: 14,
+    sectionCount: 3,
   },
   {
     id: 9,
     title: '전우들의 명복을 빌며',
-    date: '2025.08.22',
-    description:
-      '전쟁에서 목숨을 잃은 전우들을 기리며. 그들의 희생이 헛되지 않도록 살아남은 우리의 사명을 느낍니다.',
+    image: 'https://via.placeholder.com/300x200?text=전우들의+명복을+빌며',
+    createdAt: '2025-08-22T00:00:00.000Z',
+    replyCount: 45,
+    sectionCount: 7,
   },
   {
     id: 10,
     title: '전쟁의 교훈',
-    date: '2025.08.21',
-    description:
-      '6.25 전쟁을 통해 배운 교훈들. 자유와 평화의 소중함, 그리고 나라를 지키는 것의 의미를 깨달았습니다.',
+    image: 'https://via.placeholder.com/300x200?text=전쟁의+교훈',
+    createdAt: '2025-08-21T00:00:00.000Z',
+    replyCount: 18,
+    sectionCount: 3,
   },
   {
     id: 11,
     title: '후세를 위한 기록',
-    date: '2025.08.20',
-    description:
-      '이런 전쟁이 다시는 일어나지 않기를 바라며, 후세들에게 전해주고 싶은 이야기들을 기록합니다.',
+    image: 'https://via.placeholder.com/300x200?text=후세를+위한+기록',
+    createdAt: '2025-08-20T00:00:00.000Z',
+    replyCount: 22,
+    sectionCount: 4,
   },
   {
     id: 12,
     title: '영웅들의 이야기',
-    date: '2025.08.19',
-    description:
-      '전쟁터에서 목숨을 바쳐 싸운 영웅들의 이야기. 그들의 용기와 희생정신을 기억하고 싶습니다.',
+    image: 'https://via.placeholder.com/300x200?text=영웅들의+이야기',
+    createdAt: '2025-08-19T00:00:00.000Z',
+    replyCount: 16,
+    sectionCount: 3,
   },
 ];
 
 const WarMemoir = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // 페이지당 6개 아이템 (2열 x 3행)
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0); // API는 0부터 시작
+  const [memoirs, setMemoirs] = useState<Memoir[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const itemsPerPage = 6; // 페이지당 6개 아이템 (2열 x 3행)
 
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(sampleMemoirs.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentMemoirs = sampleMemoirs.slice(startIndex, endIndex);
+  // API에서 회고록 데이터 가져오기
+  useEffect(() => {
+    const fetchMemoirs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  // 페이지 변경 함수
+        // 프록시를 통한 실제 API 호출
+        const response = await memoirService.getMemoirs(
+          currentPage,
+          itemsPerPage
+        );
+
+        if (response.isSuccess && response.result) {
+          setMemoirs(response.result.content);
+          setTotalPages(response.result.totalPages);
+        } else {
+          setError('데이터를 불러오는데 실패했습니다.');
+        }
+      } catch (err) {
+        console.error('회고록 조회 실패:', err);
+        setError('서버 연결에 실패했습니다.');
+        // 에러 시 샘플 데이터 사용
+        const startIndex = currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = sampleMemoirs.slice(startIndex, endIndex);
+
+        setMemoirs(pageData);
+        setTotalPages(Math.ceil(sampleMemoirs.length / itemsPerPage));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMemoirs();
+  }, [currentPage]);
+
+  // 페이지 변경 함수 (API는 0부터 시작하므로 -1)
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      setCurrentPage(page - 1);
     }
   };
 
@@ -165,30 +223,60 @@ const WarMemoir = () => {
     return buttons;
   };
 
+  if (loading) {
+    return (
+      <main className='war-memoir'>
+        <div className='content-container'>
+          <div className='loading'>로딩 중...</div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className='war-memoir'>
+        <div className='content-container'>
+          <div className='error'>{error}</div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className='war-memoir'>
       <div className='content-container'>
         <div className='content-grid'>
-          {currentMemoirs.map(memoir => (
+          {memoirs.map(memoir => (
             <div
               key={memoir.id}
               className='content-card'
               onClick={() => handleCardClick(memoir.id)}
             >
               <div className='card-image'>
-                <div className='image-placeholder'>이미지</div>
+                {memoir.image ? (
+                  <img src={memoir.image} alt={memoir.title} />
+                ) : (
+                  <div className='image-placeholder'>이미지</div>
+                )}
               </div>
               <div className='card-content'>
                 <h3 className='card-title'>{memoir.title}</h3>
-                <p className='card-date'>발간일 : {memoir.date}</p>
-                <p className='card-description'>{memoir.description}</p>
+                <p className='card-date'>
+                  {new Date(memoir.createdAt).toLocaleDateString('ko-KR')}
+                </p>
+                <p className='card-description'>
+                  댓글 {memoir.replyCount}개 • 섹션 {memoir.sectionCount}개
+                </p>
               </div>
             </div>
           ))}
         </div>
 
         {/* 페이지네이션 */}
-        <div className='pagination'>{renderPaginationButtons()}</div>
+        {totalPages > 1 && (
+          <div className='pagination'>{renderPaginationButtons()}</div>
+        )}
       </div>
     </main>
   );
