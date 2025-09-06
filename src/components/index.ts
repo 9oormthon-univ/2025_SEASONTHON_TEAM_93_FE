@@ -4,5 +4,6 @@ export { default as WarMemoir } from './WarMemoir';
 export { default as WarMemoirDetail } from './WarMemoirDetail';
 export { default as WriteLetter } from './WriteLetter';
 export { default as WriteDetail } from './WriteDetail';
+export { default as KakaoLogin } from './KakaoLogin';
 
 // 필요에 따라 추가 컴포넌트들을 여기에 export하세요
