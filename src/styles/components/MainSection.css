@@ -1,0 +1,13 @@
+/* MainSection Component Styles */
+.MainSection {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.MainSection img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
