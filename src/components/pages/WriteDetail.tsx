@@ -28,7 +28,7 @@ const WriteDetail = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // 편지 전송 로직
-    console.log('편지 전송:', formData);
+    // 편지 전송 처리 (향후 API 연동)
     alert('편지가 성공적으로 전송되었습니다!');
   };
 

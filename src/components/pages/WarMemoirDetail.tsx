@@ -1,7 +1,8 @@
 import '../../styles/pages/WarMemoirDetail.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { memoirService } from '../../services';
+import { memoirService, replyService } from '../../services';
+import type { ReplyCreateRequest } from '../../types/api/reply';
 
 // 타입 정의 (memoirService와 동일)
 interface MemoirSection {
@@ -27,6 +28,11 @@ const WarMemoirDetail = () => {
   const [memoir, setMemoir] = useState<MemoirDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // 댓글 작성 관련 상태
+  const [replyTitle, setReplyTitle] = useState('');
+  const [replyContent, setReplyContent] = useState('');
+  const [submittingReply, setSubmittingReply] = useState(false);
 
   useEffect(() => {
     const fetchMemoirDetail = async () => {
@@ -47,7 +53,6 @@ const WarMemoirDetail = () => {
           setError('회고록을 불러오는데 실패했습니다.');
         }
       } catch (err) {
-        console.error('회고록 상세 조회 실패:', err);
         setError('서버 연결에 실패했습니다.');
       } finally {
         setLoading(false);
@@ -56,6 +61,50 @@ const WarMemoirDetail = () => {
 
     fetchMemoirDetail();
   }, [id]);
+
+  // 댓글 작성 핸들러
+  const handleReplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!id || !replyTitle.trim() || !replyContent.trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setSubmittingReply(true);
+      
+      const replyData: ReplyCreateRequest = {
+        title: replyTitle.trim(),
+        content: replyContent.trim(),
+      };
+
+      const response = await replyService.createReply(parseInt(id), replyData);
+      
+      if (response.isSuccess) {
+        alert('댓글이 성공적으로 작성되었습니다.');
+        // 입력 필드 초기화
+        setReplyTitle('');
+        setReplyContent('');
+        // 회고록 데이터 새로고침 (댓글 수 업데이트)
+        window.location.reload();
+      } else {
+        alert('댓글 작성에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 작성 중 오류가 발생했습니다.');
+    } finally {
+      setSubmittingReply(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -157,16 +206,33 @@ const WarMemoirDetail = () => {
           </div>
 
           {/* 댓글 입력 폼 */}
-          <div className='comment-form'>
-            <textarea
-              placeholder='댓글을 입력해주세요.'
-              className='comment-input'
-              disabled
+          <form className='comment-form' onSubmit={handleReplySubmit}>
+            <input
+              type='text'
+              placeholder='댓글 제목을 입력해주세요.'
+              className='comment-title-input'
+              value={replyTitle}
+              onChange={(e) => setReplyTitle(e.target.value)}
+              disabled={submittingReply}
+              required
             />
-            <button className='comment-submit' disabled>
-              댓글 등록하기
+            <textarea
+              placeholder='댓글 내용을 입력해주세요.'
+              className='comment-input'
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              disabled={submittingReply}
+              rows={4}
+              required
+            />
+            <button 
+              type='submit'
+              className='comment-submit'
+              disabled={submittingReply || !replyTitle.trim() || !replyContent.trim()}
+            >
+              {submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </main>

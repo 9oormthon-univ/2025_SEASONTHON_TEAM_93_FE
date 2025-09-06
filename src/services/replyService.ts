@@ -1,6 +1,6 @@
 import api from './axiosConfig';
 import type { ApiResponse } from '../types/api/common';
-import type { ReplyPageResponse, ReplyPageRequest } from '../types/api/reply';
+import type { ReplyPageResponse, ReplyPageRequest, ReplyCreateRequest, Reply } from '../types/api/reply';
 
 // 회고록 댓글 서비스
 export const replyService = {
@@ -25,6 +25,19 @@ export const replyService = {
 
     const response = await api.get<ApiResponse<ReplyPageResponse>>(
       `/warmemoir/${warMemoirId}/replies?${params.toString()}`
+    );
+    
+    return response.data;
+  },
+
+  // 회고록 댓글 작성 (인증 필요)
+  createReply: async (
+    warMemoirId: number,
+    replyData: ReplyCreateRequest
+  ): Promise<ApiResponse<Reply>> => {
+    const response = await api.post<ApiResponse<Reply>>(
+      `/warmemoir/${warMemoirId}/replies`,
+      replyData
     );
     
     return response.data;

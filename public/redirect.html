@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 처리 중...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="spinner"></div>
+        <h1>로그인 처리 중...</h1>
+        <p>잠시만 기다려주세요.</p>
+    </div>
+
+    <script>
+        // URL 파라미터 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const email = urlParams.get('email');
+        const id = urlParams.get('id');
+
+        console.log('Redirect - Token:', token ? token.substring(0, 30) + '...' : 'null');
+        console.log('Redirect - Email:', email);
+        console.log('Redirect - ID:', id);
+
+        if (token && email && id) {
+            // 프론트엔드 URL로 리다이렉트
+            const frontendUrl = window.location.protocol === 'https:' 
+                ? 'https://your-frontend-domain.com' // 운영환경 URL로 변경 필요
+                : 'http://localhost:5173'; // 개발환경
+            
+            const redirectUrl = `${frontendUrl}/?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&id=${encodeURIComponent(id)}`;
+            
+            console.log('Redirect - Frontend URL:', redirectUrl);
+            
+            // 즉시 리다이렉트
+            window.location.href = redirectUrl;
+        } else {
+            console.error('Redirect - 필수 파라미터 누락');
+            // 로그인 페이지로 리다이렉트
+            const frontendUrl = window.location.protocol === 'https:' 
+                ? 'https://your-frontend-domain.com/login'
+                : 'http://localhost:5173/login';
+            
+            window.location.href = frontendUrl;
+        }
+    </script>
+</body>
+</html>

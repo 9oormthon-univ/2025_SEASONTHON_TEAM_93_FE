@@ -24,6 +24,12 @@ export interface ReplyPageRequest {
   sort?: string[];
 }
 
+// 댓글 작성 요청
+export interface ReplyCreateRequest {
+  title: string;
+  content: string;
+}
+
 // 댓글 페이지 응답
 export interface ReplyPageResponse {
   totalPages: number;

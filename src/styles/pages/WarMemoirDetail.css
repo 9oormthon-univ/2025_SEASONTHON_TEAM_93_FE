@@ -296,19 +296,40 @@
 /* 댓글 입력 폼 */
 .comment-form {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: flex-end;
+}
+
+.comment-title-input {
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.comment-title-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.comment-title-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
 }
 
 .comment-input {
-  flex: 1;
-  min-height: 80px;
-  padding: 0.75rem;
+  padding: 1rem;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  border-radius: 8px;
   font-family: inherit;
+  font-size: 1rem;
   resize: vertical;
+  min-height: 120px;
   transition: border-color 0.2s ease;
 }
 
@@ -316,6 +337,12 @@
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.comment-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
 }
 
 .comment-submit {

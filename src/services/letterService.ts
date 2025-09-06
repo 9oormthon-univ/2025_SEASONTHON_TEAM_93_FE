@@ -23,7 +23,6 @@ export const letterService = {
       });
       return response.data;
     } catch (error) {
-      console.error('편지 목록 조회 실패:', error);
       throw error;
     }
   },
@@ -34,7 +33,6 @@ export const letterService = {
       const response = await api.get(`/api/letters/${id}`);
       return response.data;
     } catch (error) {
-      console.error('편지 상세 조회 실패:', error);
       throw error;
     }
   },
@@ -45,7 +43,6 @@ export const letterService = {
       const response = await api.post('/api/letters', letterData);
       return response.data;
     } catch (error) {
-      console.error('편지 작성 실패:', error);
       throw error;
     }
   },
@@ -59,7 +56,6 @@ export const letterService = {
       const response = await api.put(`/api/letters/${id}`, letterData);
       return response.data;
     } catch (error) {
-      console.error('편지 수정 실패:', error);
       throw error;
     }
   },
@@ -69,7 +65,6 @@ export const letterService = {
     try {
       await api.delete(`/api/letters/${id}`);
     } catch (error) {
-      console.error('편지 삭제 실패:', error);
       throw error;
     }
   },
@@ -85,7 +80,6 @@ export const letterService = {
       });
       return response.data;
     } catch (error) {
-      console.error('영웅 목록 조회 실패:', error);
       throw error;
     }
   },
@@ -96,7 +90,6 @@ export const letterService = {
       const response = await api.get(`/api/heroes/${id}`);
       return response.data;
     } catch (error) {
-      console.error('영웅 상세 조회 실패:', error);
       throw error;
     }
   },

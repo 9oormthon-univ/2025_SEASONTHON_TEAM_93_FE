@@ -43,7 +43,6 @@ const WarMemoir = () => {
           setError('데이터를 불러오는데 실패했습니다.');
         }
       } catch (err) {
-        console.error('회고록 조회 실패:', err);
         setError('서버 연결에 실패했습니다.');
       } finally {
         setLoading(false);

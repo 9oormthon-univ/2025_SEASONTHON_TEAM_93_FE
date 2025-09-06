@@ -3,11 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="shortcut icon" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta https-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>영웅의 집</title>
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- 카카오 로그인 리다이렉트 처리 스크립트 -->
+    <script>
+      // 현재 URL이 warhero.site이고 토큰 파라미터가 있으면 localhost로 리다이렉트
+      if (window.location.hostname === 'warhero.site' && window.location.search.includes('token=')) {
+        const currentSearch = window.location.search;
+        const newUrl = `http://localhost:5173/${currentSearch}`;
+        // replace 사용으로 브라우저 히스토리에서 warhero.site 제거
+        window.location.replace(newUrl);
+      }
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

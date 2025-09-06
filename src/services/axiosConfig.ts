@@ -17,11 +17,9 @@ api.interceptors.request.use(
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log('API 요청:', config);
     return config;
   },
   error => {
-    console.error('요청 에러:', error);
     return Promise.reject(error);
   }
 );
@@ -29,18 +27,17 @@ api.interceptors.request.use(
 // 응답 인터셉터 (응답 후에 실행)
 api.interceptors.response.use(
   response => {
-    console.log('API 응답:', response);
     return response;
   },
   error => {
-    console.error('응답 에러:', error);
-
     // 401 에러 시 토큰 만료 처리
     if (error.response?.status === 401) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
       // 로그인 페이지로 리다이렉트
-      window.location.href = '/';
+      window.location.href = '/login';
     }
 
     return Promise.reject(error);
