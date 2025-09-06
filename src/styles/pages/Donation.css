@@ -1,5 +1,415 @@
-/* Donation Page Styles */
+/* 후원하기 페이지 */
 .donation-page {
+  padding: 2rem 0;
+  margin-top: 120px; /* 헤더 높이만큼 여백 */
+  min-height: calc(100vh - 120px);
+  background-color: #f8fafc;
+}
+
+.donation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 헤더 탭 */
+.donation-header {
+  margin-bottom: 2rem;
+}
+
+.header-tabs {
+  display: flex;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  font-weight: 600;
+}
+
+.tab-button:hover:not(.active) {
+  color: #374151;
+  background-color: #f3f4f6;
+}
+
+/* 후원 카드 그리드 */
+.donation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* 후원 카드 */
+.donation-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.donation-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 카드 이미지 영역 */
+.card-image-placeholder {
   width: 100%;
-  min-height: 100vh;
+  height: 200px;
+  background-color: #e5e7eb;
+  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  position: relative;
+}
+
+.card-image-placeholder::before {
+  content: "이미지 영역";
+  position: absolute;
+  opacity: 0.6;
+}
+
+/* 카드 콘텐츠 */
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  overflow: hidden;
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-text {
+  white-space: nowrap;
+}
+
+/* 카드 제목 */
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+/* 카드 세부사항 */
+.card-details {
+  margin-bottom: 1.5rem;
+}
+
+.period {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.period .label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.period .value {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.description {
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.website-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.website-info .label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.website-url {
+  font-size: 0.875rem;
+  color: #3b82f6;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+/* 후원하기/상세보기 버튼 */
+.donate-button {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.donate-button:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.donate-button:active {
+  transform: translateY(0);
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.pagination-btn {
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(.active) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.pagination-btn.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prev-btn,
+.next-btn {
+  font-weight: 600;
+}
+
+/* 반응형 디자인 - 모바일 퍼스트 */
+@media (max-width: 767px) {
+  .donation-page {
+    padding: 1rem 0;
+    margin-top: 100px;
+  }
+
+  .donation-container {
+    padding: 0 0.75rem;
+  }
+
+  .header-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tab-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .donation-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card-image-placeholder {
+    height: 150px;
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .description {
+    -webkit-line-clamp: 2;
+  }
+
+  .pagination {
+    gap: 0.25rem;
+  }
+
+  .pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  .tab-button {
+    min-width: 120px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .donation-page {
+    margin-top: 110px;
+  }
+
+  .donation-container {
+    padding: 0 1.5rem;
+  }
+
+  .card-image-placeholder {
+    height: 180px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .donation-page {
+    margin-top: 120px;
+    padding: 2.5rem 0;
+  }
+
+  .donation-container {
+    padding: 0 2rem;
+  }
+
+  .donation-grid {
+    gap: 2rem;
+  }
+
+  .card-content {
+    padding: 2rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-image-placeholder {
+    height: 220px;
+  }
+}
+
+/* 로딩 및 빈 상태 */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: #6b7280;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.empty-state p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* 호버 효과 개선 */
+@media (hover: hover) {
+  .donation-card:hover .card-title {
+    color: #3b82f6;
+  }
+  
+  .donation-card:hover .website-url {
+    color: #1d4ed8;
+  }
+}
+
+/* 접근성 개선 */
+.pagination-btn:focus,
+.donate-button:focus,
+.tab-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* 다크모드 대응 준비 */
+@media (prefers-color-scheme: dark) {
+  /* 다크모드 스타일은 나중에 추가 가능 */
 }

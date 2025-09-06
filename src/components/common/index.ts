@@ -4,3 +4,4 @@ export { default as MainSection } from './MainSection';
 export { default as Footer } from './Footer';
 export { default as AuthGuard } from './AuthGuard';
 export { default as LoginSuccess } from './LoginSuccess';
+export { default as DonationModal } from './DonationModal';

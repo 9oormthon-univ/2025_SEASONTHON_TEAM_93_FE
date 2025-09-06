@@ -65,19 +65,6 @@ export const letterService = {
     return response.data;
   },
 
-  // 편지 수정
-  updateLetter: async (
-    id: number,
-    letterData: Partial<LetterData>
-  ): Promise<LetterResponse> => {
-    try {
-      const response = await api.put(`/api/letters/${id}`, letterData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
   // 편지 수정 (인증 필요)
   updateLetter: async (
     letterId: number,
