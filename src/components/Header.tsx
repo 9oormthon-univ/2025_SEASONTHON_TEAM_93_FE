@@ -116,7 +116,7 @@ const Header = () => {
         </nav>
       </div>
       <div className='header-message'>
-        <p>여러분의 후원이 큰 힘이 됩니다</p>
+        <p>"영웅에게 전하는 우리의 마음"</p>
       </div>
     </header>
   );
