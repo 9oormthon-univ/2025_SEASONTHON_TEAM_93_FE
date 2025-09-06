@@ -243,6 +243,156 @@
   margin-bottom: 2rem;
 }
 
+/* 댓글 에러 및 로딩 상태 */
+.comments-error {
+  text-align: center;
+  padding: 2rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comments-error p {
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.retry-button {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background-color: #b91c1c;
+}
+
+.comments-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.comments-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+  font-style: italic;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* 개별 댓글 아이템 */
+.comment-item {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.comment-item:hover {
+  border-color: #d1d5db;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+.author-email {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.comment-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.comment-content {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.comment-content p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+}
+
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+
+.comment-updated {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  font-style: italic;
+}
+
+/* 더 보기 버튼 */
+.load-more-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.load-more-button {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.load-more-button:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.load-more-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
 .comment {
   display: flex;
   gap: 1rem;
@@ -409,5 +559,43 @@
 
   .comment-submit {
     align-self: flex-end;
+  }
+
+  /* 모바일에서 댓글 반응형 */
+  .comment-item {
+    padding: 1rem;
+  }
+
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .comment-author {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+  }
+
+  .author-email {
+    font-size: 0.8rem;
+  }
+
+  .comment-title {
+    font-size: 1rem;
+  }
+
+  .comment-content p {
+    font-size: 0.9rem;
+  }
+
+  .load-more-button {
+    min-width: auto;
+    width: 100%;
   }
 }

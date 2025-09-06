@@ -2,7 +2,7 @@ import '../../styles/pages/WarMemoirDetail.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { memoirService, replyService } from '../../services';
-import type { ReplyCreateRequest } from '../../types/api/reply';
+import type { ReplyCreateRequest, Reply } from '../../types/api/reply';
 
 // 타입 정의 (memoirService와 동일)
 interface MemoirSection {
@@ -28,6 +28,14 @@ const WarMemoirDetail = () => {
   const [memoir, setMemoir] = useState<MemoirDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // 댓글 관련 상태
+  const [replies, setReplies] = useState<Reply[]>([]);
+  const [repliesLoading, setRepliesLoading] = useState(false);
+  const [repliesError, setRepliesError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [hasMoreReplies, setHasMoreReplies] = useState(true);
   
   // 댓글 작성 관련 상태
   const [replyTitle, setReplyTitle] = useState('');
@@ -62,6 +70,58 @@ const WarMemoirDetail = () => {
     fetchMemoirDetail();
   }, [id]);
 
+  // 댓글 목록 불러오기
+  const fetchReplies = async (page: number = 0, append: boolean = false) => {
+    if (!id) return;
+
+    try {
+      setRepliesLoading(true);
+      setRepliesError(null);
+
+      const pageRequest = {
+        page: page,
+        size: 10, // 한 번에 10개씩 로드
+        sort: ["createdAt,desc"] // 최신순 정렬
+      };
+
+      const response = await replyService.getReplies(parseInt(id), pageRequest);
+
+      if (response.isSuccess && response.result) {
+        const newReplies = response.result.content;
+        
+        if (append) {
+          setReplies(prev => [...prev, ...newReplies]);
+        } else {
+          setReplies(newReplies);
+        }
+        
+        setCurrentPage(page);
+        setTotalPages(response.result.totalPages);
+        setHasMoreReplies(page + 1 < response.result.totalPages);
+      } else {
+        setRepliesError('댓글을 불러오는데 실패했습니다.');
+      }
+    } catch (error) {
+      setRepliesError('댓글 로딩 중 오류가 발생했습니다.');
+    } finally {
+      setRepliesLoading(false);
+    }
+  };
+
+  // 컴포넌트 마운트 시 첫 번째 댓글 페이지 로드
+  useEffect(() => {
+    if (memoir) {
+      fetchReplies(0, false);
+    }
+  }, [memoir]);
+
+  // 더 많은 댓글 로드
+  const loadMoreReplies = () => {
+    if (hasMoreReplies && !repliesLoading) {
+      fetchReplies(currentPage + 1, true);
+    }
+  };
+
   // 댓글 작성 핸들러
   const handleReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,8 +154,12 @@ const WarMemoirDetail = () => {
         // 입력 필드 초기화
         setReplyTitle('');
         setReplyContent('');
-        // 회고록 데이터 새로고침 (댓글 수 업데이트)
-        window.location.reload();
+        // 댓글 목록 새로고침 및 회고록 데이터 업데이트
+        fetchReplies(0, false);
+        // 회고록 댓글 수 업데이트를 위해 회고록 정보도 다시 로드
+        if (memoir) {
+          setMemoir({...memoir, replyCount: memoir.replyCount + 1});
+        }
       } else {
         alert('댓글 작성에 실패했습니다: ' + response.message);
       }
@@ -194,15 +258,82 @@ const WarMemoirDetail = () => {
         </div>
         */}
 
-        {/* 댓글 섹션 - 향후 댓글 API 연동 */}
+        {/* 댓글 섹션 */}
         <div className='comments-section'>
           <h2 className='section-title'>댓글 ({memoir.replyCount}개)</h2>
 
-          {/* 댓글 목록 - replyService를 사용하여 실제 댓글 데이터 표시 */}
+          {/* 댓글 목록 */}
           <div className='comments-list'>
-            <p className='comments-placeholder'>
-              아직 댓글이 없습니다. 첫 댓글을 남겨보세요!
-            </p>
+            {repliesError && (
+              <div className='comments-error'>
+                <p>{repliesError}</p>
+                <button onClick={() => fetchReplies(0, false)} className='retry-button'>
+                  다시 시도
+                </button>
+              </div>
+            )}
+            
+            {replies.length === 0 && !repliesLoading && !repliesError && (
+              <p className='comments-placeholder'>
+                아직 댓글이 없습니다. 첫 댓글을 남겨보세요!
+              </p>
+            )}
+
+            {replies.map((reply) => (
+              <div key={reply.id} className='comment-item'>
+                <div className='comment-header'>
+                  <div className='comment-author'>
+                    <span className='author-name'>{reply.author.name}</span>
+                    <span className='author-email'>({reply.author.email})</span>
+                  </div>
+                  <div className='comment-date'>
+                    {new Date(reply.createdAt).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </div>
+                </div>
+                <h4 className='comment-title'>{reply.title}</h4>
+                <div className='comment-content'>
+                  {reply.content.split('\n').map((line, index) => (
+                    <p key={index}>{line}</p>
+                  ))}
+                </div>
+                {reply.updatedAt !== reply.createdAt && (
+                  <div className='comment-updated'>
+                    수정됨: {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* 더 보기 버튼 */}
+            {hasMoreReplies && (
+              <div className='load-more-container'>
+                <button 
+                  onClick={loadMoreReplies}
+                  disabled={repliesLoading}
+                  className='load-more-button'
+                >
+                  {repliesLoading ? '댓글 로딩 중...' : `더 많은 댓글 보기 (${currentPage + 1}/${totalPages})`}
+                </button>
+              </div>
+            )}
+
+            {repliesLoading && replies.length === 0 && (
+              <div className='comments-loading'>
+                <p>댓글을 불러오는 중...</p>
+              </div>
+            )}
           </div>
 
           {/* 댓글 입력 폼 */}
