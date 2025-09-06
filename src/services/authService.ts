@@ -16,22 +16,14 @@ export const authService = {
 
   // 로그인
   login: async (loginData: LoginRequest): Promise<AuthResponseType> => {
-    try {
-      const response = await api.post('/api/auth/login', loginData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.post<AuthResponseType>('/api/auth/login', loginData);
+    return response.data;
   },
 
   // 회원가입
   signup: async (signupData: SignupRequest): Promise<AuthResponseType> => {
-    try {
-      const response = await api.post('/api/auth/signup', signupData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.post<AuthResponseType>('/api/auth/signup', signupData);
+    return response.data;
   },
 
   // 로그아웃

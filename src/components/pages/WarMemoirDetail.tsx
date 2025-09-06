@@ -345,24 +345,13 @@ const WarMemoirDetail = () => {
   return (
     <main className='war-memoir-detail'>
       <div className='content-container'>
-        {/* 헤더 영역 */}
-        <div className='detail-header'>
-          <button onClick={() => navigate('/home')} className='back-button'>
-            ← 목록으로 돌아가기
-          </button>
-          <div className='header-actions'>
-            <button
-              className='letter-button'
-              onClick={() => navigate(`/write-detail/${id}`)}
-            >
-              해당 영웅에게 바로 편지쓰기
-            </button>
-          </div>
+        {/* 제목 */}
+        <div className='detail-title-section'>
+          <h1 className='detail-title'>{memoir.title}</h1>
         </div>
 
-        {/* 제목 및 메타 정보 */}
+        {/* 메타 정보 */}
         <div className='detail-meta'>
-          <h1 className='detail-title'>{memoir.title}</h1>
           <p className='detail-date'>
             발간일: {new Date(memoir.createdAt).toLocaleDateString('ko-KR')}
           </p>
@@ -376,8 +365,21 @@ const WarMemoirDetail = () => {
           {memoir.image ? (
             <img src={memoir.image} alt={memoir.title} />
           ) : (
-            <div className='image-placeholder'>이미지</div>
+            <img src='/src/components/img/H4.jpeg' alt={memoir.title} />
           )}
+        </div>
+
+        {/* 액션 버튼들 */}
+        <div className='detail-actions'>
+          <button onClick={() => navigate('/home')} className='back-button'>
+            ← 목록으로 돌아가기
+          </button>
+          <button
+            className='letter-button'
+            onClick={() => navigate(`/write-detail/${id}`)}
+          >
+            해당 영웅에게 바로 편지쓰기
+          </button>
         </div>
 
         {/* 섹션별 내용 */}
@@ -589,7 +591,7 @@ const WarMemoirDetail = () => {
                 submittingReply || !replyTitle.trim() || !replyContent.trim()
               }
             >
-{submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
+              {submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
             </button>
           </form>
         </div>

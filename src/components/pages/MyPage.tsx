@@ -12,7 +12,8 @@ const MyPage = () => {
       author: '김민수',
       date: '2024년 12월 15일',
       status: 'pending',
-      content: '어르신의 용기 있는 이야기에 깊은 감동을 받았습니다. 감사합니다.',
+      content:
+        '어르신의 용기 있는 이야기에 깊은 감동을 받았습니다. 감사합니다.',
       memoirTitle: '1951년 겨울, 춘천에서의 기억',
     },
     {
@@ -65,7 +66,8 @@ const MyPage = () => {
       author: '김민수',
       date: '2024년 12월 15일',
       status: 'pending',
-      content: '어르신께서 나라를 위해 희생하신 덕분에 지금의 평화가 있다고 생각합니다. 진심으로 감사드립니다.',
+      content:
+        '어르신께서 나라를 위해 희생하신 덕분에 지금의 평화가 있다고 생각합니다. 진심으로 감사드립니다.',
       veteranName: '박영수 어르신',
       memoirTitle: '1951년 겨울, 춘천에서의 기억',
     },
@@ -76,7 +78,8 @@ const MyPage = () => {
       date: '2024년 12월 8일',
       status: 'delivered',
       deliveryDate: '2024.12.10',
-      content: '어르신의 희생정신과 용기에 깊은 감동을 받았습니다. 건강하시길 바랍니다.',
+      content:
+        '어르신의 희생정신과 용기에 깊은 감동을 받았습니다. 건강하시길 바랍니다.',
       veteranName: '이철호 어르신',
       memoirTitle: '부산 피난길에서 만난 사람들',
     },
@@ -87,7 +90,8 @@ const MyPage = () => {
       date: '2024년 11월 25일',
       status: 'delivered',
       deliveryDate: '2024.11.28',
-      content: '전쟁의 아픔을 겪으시면서도 조국을 지켜주신 모든 분들께 감사드립니다.',
+      content:
+        '전쟁의 아픔을 겪으시면서도 조국을 지켜주신 모든 분들께 감사드립니다.',
       veteranName: '최동진 어르신',
       memoirTitle: '백마고지에서 보낸 100일',
     },
@@ -251,7 +255,7 @@ const MyPage = () => {
           <div className='item-header'>
             <h3 className='item-title'>{sponsorship.title}</h3>
             <div className='item-meta'>
-              <span className='author'>{sponsorship.author}</span>
+              <span className='author'>{sponsorship.organization}</span>
               <span className='date'>{sponsorship.date}</span>
             </div>
           </div>

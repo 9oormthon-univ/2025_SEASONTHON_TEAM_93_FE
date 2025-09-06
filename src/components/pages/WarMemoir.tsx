@@ -148,7 +148,7 @@ const WarMemoir = () => {
                 {memoir.image ? (
                   <img src={memoir.image} alt={memoir.title} />
                 ) : (
-                  <div className='image-placeholder'>이미지</div>
+                  <img src={`/src/components/img/${['H1.jpg', 'H2.jpg', 'H3.jpeg', 'H4.jpeg', 'P3.jpeg', 'W1.jpg', 'W2.jpeg', 'W3.jpeg'][memoir.id % 8]}`} alt={memoir.title} />
                 )}
               </div>
               <div className='card-content'>

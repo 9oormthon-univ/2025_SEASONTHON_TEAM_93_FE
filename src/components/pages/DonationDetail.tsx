@@ -33,17 +33,18 @@ const DonationDetail = () => {
   const [showDonationModal, setShowDonationModal] = useState(false);
 
   useEffect(() => {
-    // 실제로는 API에서 데이터를 가져올 예정
+    // 후원 프로젝트 상세 정보 가져오기
     const fetchDonationDetail = async () => {
       setLoading(true);
 
-      // 임시 데이터 (나중에 API 호출로 대체)
+      // 샘플 데이터
       const donationId = parseInt(id || '1');
       const donationProjects = [
         {
           id: 1,
           title: '6.25 참전용사 의료지원 프로젝트',
-          description: '고령의 참전용사들을 위한 전문 의료진 파견 및 의료비 지원 사업',
+          description:
+            '고령의 참전용사들을 위한 전문 의료진 파견 및 의료비 지원 사업',
           detailContent: `우리나라의 자유와 평화를 지키기 위해 목숨을 걸고 싸우신 6.25 참전용사 어르신들이 고령으로 인해 각종 질병과 의료비 부담으로 어려움을 겪고 계십니다.
 
 본 프로젝트는 이러한 어르신들께 전문 의료진을 파견하여 정기적인 건강검진과 치료 서비스를 제공하고, 경제적 부담을 덜어드리기 위해 의료비를 지원하는 사업입니다.
@@ -73,7 +74,8 @@ const DonationDetail = () => {
         {
           id: 2,
           title: '전쟁기념관 보존 및 교육 사업',
-          description: '후세에게 평화의 소중함을 전하기 위한 전쟁기념관 유물 보존과 청소년 평화교육',
+          description:
+            '후세에게 평화의 소중함을 전하기 위한 전쟁기념관 유물 보존과 청소년 평화교육',
           detailContent: `전쟁의 참혹함과 평화의 소중함을 후세에 올바르게 전달하기 위해 전쟁기념관의 소중한 유물들을 보존하고, 청소년들에게 살아있는 역사교육을 제공하는 사업입니다.
 
 ▶ 사업 목표
@@ -97,14 +99,14 @@ const DonationDetail = () => {
           period: '2024.03.01 ~ 2025.02.28',
           websiteUrl: 'www.warmemorial.or.kr',
           contact: '02-789-0123',
-        }
+        },
       ];
 
-      const mockData: DonationDetailData = donationProjects.find(p => p.id === donationId) || donationProjects[0];
-      
+      const baseData = donationProjects.find(p => p.id === donationId) || donationProjects[0];
+
       const detailData: DonationDetailData = {
-        ...mockData,
-        images: [], // 이미지들은 나중에 실제 URL로 대체
+        ...baseData,
+        images: [],
         socialLinks: {
           facebook: 'https://facebook.com/koreanveterans',
           twitter: 'https://twitter.com/koreanveterans',
@@ -113,7 +115,7 @@ const DonationDetail = () => {
         },
       };
 
-      // 실제 API 호출 시뮬레이션
+      // 데이터 로딩 시뮬레이션
       setTimeout(() => {
         setDonationData(detailData);
         setLoading(false);
@@ -199,18 +201,11 @@ const DonationDetail = () => {
         {/* 이미지 갤러리 */}
         <div className='image-gallery'>
           <div className='main-image'>
-            {/* 메인 이미지 - 실제로는 donationData.images[0] 사용 */}
-            <div className='image-placeholder main-placeholder'>
-              메인 이미지
-            </div>
+            <img src='/src/components/img/H1.jpg' alt='메인 이미지' />
           </div>
           <div className='sub-images'>
-            <div className='image-placeholder sub-placeholder'>
-              서브 이미지 1
-            </div>
-            <div className='image-placeholder sub-placeholder'>
-              서브 이미지 2
-            </div>
+            <img src='/src/components/img/H2.jpg' alt='서브 이미지 1' />
+            <img src='/src/components/img/H3.jpeg' alt='서브 이미지 2' />
           </div>
         </div>
 
@@ -251,7 +246,7 @@ const DonationDetail = () => {
           </div>
 
           <div className='content-sidebar'>
-            <div className='sidebar-image-placeholder'>사이드바 이미지</div>
+            {/* 사이드바 이미지 제거 - 움직임 문제로 인해 */}
           </div>
         </div>
 

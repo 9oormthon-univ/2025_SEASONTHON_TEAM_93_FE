@@ -28,7 +28,7 @@ const Donation = () => {
     null
   );
 
-  // 임시 후원 데이터 (나중에 API로 대체)
+  // 후원 프로젝트 데이터
   const donationItems: DonationItem[] = [
     {
       id: 1,
@@ -306,7 +306,7 @@ const Donation = () => {
               onClick={() => handleCardClick(item)}
             >
               <div className='card-image-placeholder'>
-                {/* 이미지 영역 - 나중에 실제 이미지로 대체 */}
+                <img src={`/src/components/img/${['H1.jpg', 'H2.jpg', 'H3.jpeg', 'H4.jpeg', 'P3.jpeg', 'W1.jpg', 'W2.jpeg', 'W3.jpeg'][item.id % 8]}`} alt={item.title} />
               </div>
 
               <div className='card-content'>
@@ -319,7 +319,7 @@ const Donation = () => {
                           alt={item.author.name}
                         />
                       ) : (
-                        <span className='avatar-text'>{item.author.name}</span>
+                        <img src={`/src/components/img/${['W1.jpg', 'W2.jpeg', 'W3.jpeg', 'H1.jpg', 'H2.jpg'][item.id % 5]}`} alt={item.author.name} />
                       )}
                     </div>
                   </div>

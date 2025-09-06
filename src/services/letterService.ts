@@ -41,12 +41,8 @@ export const letterService = {
 
   // 편지 상세 조회
   getLetterDetail: async (id: number): Promise<LetterResponse> => {
-    try {
-      const response = await api.get(`/api/letters/${id}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get<LetterResponse>(`/api/letters/${id}`);
+    return response.data;
   },
 
   // 편지 작성 (인증 필요)
@@ -87,23 +83,15 @@ export const letterService = {
     page: number = 0,
     size: number = 8
   ): Promise<HeroListResponse> => {
-    try {
-      const response = await api.get('/api/heroes', {
-        params: { page, size },
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get<HeroListResponse>('/api/heroes', {
+      params: { page, size },
+    });
+    return response.data;
   },
 
   // 영웅 상세 조회
   getHeroDetail: async (id: number): Promise<HeroResponse> => {
-    try {
-      const response = await api.get(`/api/heroes/${id}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get<HeroResponse>(`/api/heroes/${id}`);
+    return response.data;
   },
 };

@@ -42,12 +42,8 @@ export const memoirService = {
   createMemoir: async (
     memoirData: Omit<Memoir, 'id' | 'createdAt'>
   ): Promise<MemoirDetailResponse> => {
-    try {
-      const response = await api.post('/warmemoir', memoirData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.post<MemoirDetailResponse>('/warmemoir', memoirData);
+    return response.data;
   },
 
   // 회고록 수정
@@ -55,12 +51,8 @@ export const memoirService = {
     id: number,
     memoirData: Partial<Omit<Memoir, 'id' | 'createdAt'>>
   ): Promise<MemoirDetailResponse> => {
-    try {
-      const response = await api.put(`/warmemoir/${id}`, memoirData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.put<MemoirDetailResponse>(`/warmemoir/${id}`, memoirData);
+    return response.data;
   },
 
   // 회고록 삭제

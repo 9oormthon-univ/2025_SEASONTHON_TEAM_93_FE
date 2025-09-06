@@ -80,11 +80,6 @@ const WriteLetter = () => {
     // 본인이 작성한 편지만 삭제 가능하도록 체크
     const userEmail = localStorage.getItem('userEmail');
     if (userEmail !== letter.authorName) {
-      console.log('Debug Delete Attempt:', {
-        userEmail,
-        letterAuthorName: letter.authorName,
-        letterTitle: letter.title,
-      });
       alert('본인이 작성한 편지만 삭제할 수 있습니다.');
       return;
     }
@@ -154,8 +149,7 @@ const WriteLetter = () => {
 
     setEditingLetterId(letter.id);
     setEditTitle(letter.title);
-    setEditContent(letter.contentPreview); // contentPreview만 있으므로 임시로 사용
-    // warMemoirId는 API에서 가져와야 하지만 임시로 1로 설정
+    setEditContent(letter.contentPreview);
     setEditWarMemoirId(1);
   };
 
