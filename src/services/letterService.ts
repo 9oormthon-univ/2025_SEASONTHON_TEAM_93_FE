@@ -1,20 +1,16 @@
 import api from './axiosConfig';
 import type { ApiResponse } from '../types/api/common';
 import type {
-  LetterData,
-  Letter,
-  Hero,
-  LetterResponse,
-  LetterListResponse,
   LetterPageRequest,
   LetterPageApiResponse,
   LetterCreateRequest,
   LetterCreateResponse,
   LetterUpdateRequest,
   LetterUpdateResponse,
-  HeroResponse,
+  LetterResponse,
   HeroListResponse,
-} from '../types/api';
+  HeroResponse,
+} from '../types/api/letter';
 
 // 편지 관련 API 서비스
 export const letterService = {
@@ -23,7 +19,7 @@ export const letterService = {
     pageRequest: LetterPageRequest
   ): Promise<LetterPageApiResponse> => {
     const { page, size, sort } = pageRequest;
-    
+
     const params = new URLSearchParams({
       page: page.toString(),
       size: size.toString(),
@@ -31,7 +27,7 @@ export const letterService = {
 
     // sort 배열이 있으면 추가
     if (sort && sort.length > 0) {
-      sort.forEach(sortItem => {
+      sort.forEach((sortItem: string) => {
         params.append('sort', sortItem);
       });
     }
@@ -39,7 +35,7 @@ export const letterService = {
     const response = await api.get<LetterPageApiResponse>(
       `/letters?${params.toString()}`
     );
-    
+
     return response.data;
   },
 
@@ -61,7 +57,7 @@ export const letterService = {
       '/letters',
       letterData
     );
-    
+
     return response.data;
   },
 
@@ -82,7 +78,7 @@ export const letterService = {
     const response = await api.delete<ApiResponse<string>>(
       `/letters/${letterId}`
     );
-    
+
     return response.data;
   },
 

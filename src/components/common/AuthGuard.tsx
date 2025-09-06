@@ -17,7 +17,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
       const token = localStorage.getItem('accessToken');
       const isLoginPage = location.pathname === '/login';
       const isLoginSuccessPage = location.pathname === '/login-success';
-      
+
       // 토큰이 있으면 인증됨
       if (token) {
         setIsAuthenticated(true);
@@ -32,7 +32,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
           navigate('/login', { replace: true });
         }
       }
-      
+
       setIsLoading(false);
     };
 

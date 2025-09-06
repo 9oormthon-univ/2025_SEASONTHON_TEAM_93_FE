@@ -1,23 +1,17 @@
 import api from './axiosConfig';
 import type {
-  AuthResponse,
-  User,
-  LoginRequest,
-  SignupRequest,
   AuthResponseType,
   UserResponse,
-} from '../types/api';
+  LoginRequest,
+  SignupRequest,
+} from '../types/api/auth';
 
 // 인증 관련 API 서비스
 export const authService = {
   // 로그인 상태 확인
   checkAuth: async (): Promise<UserResponse> => {
-    try {
-      const response = await api.get('/api/auth/me');
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get<UserResponse>('/api/auth/me');
+    return response.data;
   },
 
   // 로그인

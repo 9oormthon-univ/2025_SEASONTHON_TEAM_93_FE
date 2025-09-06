@@ -1,6 +1,11 @@
 import api from './axiosConfig';
 import type { ApiResponse } from '../types/api/common';
-import type { ReplyPageResponse, ReplyPageRequest, ReplyCreateRequest, Reply } from '../types/api/reply';
+import type {
+  ReplyPageResponse,
+  ReplyPageRequest,
+  ReplyCreateRequest,
+  Reply,
+} from '../types/api/reply';
 
 // 회고록 댓글 서비스
 export const replyService = {
@@ -10,7 +15,7 @@ export const replyService = {
     pageRequest: ReplyPageRequest
   ): Promise<ApiResponse<ReplyPageResponse>> => {
     const { page, size, sort } = pageRequest;
-    
+
     const params = new URLSearchParams({
       page: page.toString(),
       size: size.toString(),
@@ -26,7 +31,7 @@ export const replyService = {
     const response = await api.get<ApiResponse<ReplyPageResponse>>(
       `/warmemoir/${warMemoirId}/replies?${params.toString()}`
     );
-    
+
     return response.data;
   },
 
@@ -39,7 +44,7 @@ export const replyService = {
       `/warmemoir/${warMemoirId}/replies`,
       replyData
     );
-    
+
     return response.data;
   },
 
@@ -53,7 +58,7 @@ export const replyService = {
       `/warmemoir/${warMemoirId}/replies/${replyId}`,
       replyData
     );
-    
+
     return response.data;
   },
 
@@ -65,7 +70,7 @@ export const replyService = {
     const response = await api.delete<ApiResponse<string>>(
       `/warmemoir/${warMemoirId}/replies/${replyId}`
     );
-    
+
     return response.data;
   },
 };

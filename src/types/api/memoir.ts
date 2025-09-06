@@ -1,4 +1,4 @@
-import { ApiResponse, Pageable, Sort } from './common';
+import type { ApiResponse, Pageable, Sort } from './common';
 
 // 회고록 기본 정보
 export interface Memoir {

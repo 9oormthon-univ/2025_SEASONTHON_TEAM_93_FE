@@ -33,30 +33,32 @@ const LoginSuccess = () => {
   }, [searchParams, navigate]);
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      textAlign: 'center'
-    }}>
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        textAlign: 'center',
+      }}
+    >
       <div>
-        <div 
-          className="login-success-spinner"
+        <div
+          className='login-success-spinner'
           style={{
             width: '64px',
             height: '64px',
             border: '4px solid rgba(255,255,255,0.3)',
             borderTop: '4px solid white',
             borderRadius: '50%',
-            margin: '0 auto 1rem'
-          }} 
+            margin: '0 auto 1rem',
+          }}
         />
         <h1>로그인 처리 중...</h1>
         <p>잠시만 기다려주세요.</p>

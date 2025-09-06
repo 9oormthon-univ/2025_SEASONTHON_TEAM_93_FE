@@ -11,7 +11,7 @@ const HomeHeader = () => {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     const email = localStorage.getItem('userEmail');
-    
+
     if (token && email) {
       setIsLoggedIn(true);
       setUserEmail(email);
@@ -69,7 +69,13 @@ const HomeHeader = () => {
               to='/'
               className={`home-nav-link ${isActiveLink('/') ? 'active' : ''}`}
             >
-              <svg className='home-nav-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+              <svg
+                className='home-nav-icon'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+              >
                 <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' />
                 <polyline points='9,22 9,12 15,12 15,22' />
               </svg>
@@ -79,7 +85,13 @@ const HomeHeader = () => {
               to='/donation'
               className={`home-nav-link ${isActiveLink('/donation') ? 'active' : ''}`}
             >
-              <svg className='home-nav-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+              <svg
+                className='home-nav-icon'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+              >
                 <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' />
               </svg>
               후원하기
@@ -88,7 +100,13 @@ const HomeHeader = () => {
               to='/home'
               className={`home-nav-link ${isActiveLink('/home') || isActiveLink('/war-memoir-detail') ? 'active' : ''}`}
             >
-              <svg className='home-nav-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+              <svg
+                className='home-nav-icon'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+              >
                 <path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' />
               </svg>
               나의 참전 회고록
@@ -97,7 +115,13 @@ const HomeHeader = () => {
               to='/write-letter'
               className={`home-nav-link ${isActiveLink('/write-letter') || isActiveLink('/write-detail') ? 'active' : ''}`}
             >
-              <svg className='home-nav-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+              <svg
+                className='home-nav-icon'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+              >
                 <path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' />
                 <polyline points='14,2 14,8 20,8' />
                 <line x1='16' y1='13' x2='8' y2='13' />
@@ -110,7 +134,13 @@ const HomeHeader = () => {
               to='/mypage'
               className={`home-nav-link ${isActiveLink('/mypage') ? 'active' : ''}`}
             >
-              <svg className='home-nav-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+              <svg
+                className='home-nav-icon'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+              >
                 <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' />
                 <circle cx='12' cy='7' r='4' />
               </svg>

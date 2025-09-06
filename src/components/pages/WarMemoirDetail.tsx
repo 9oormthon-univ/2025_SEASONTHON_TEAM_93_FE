@@ -28,7 +28,7 @@ const WarMemoirDetail = () => {
   const [memoir, setMemoir] = useState<MemoirDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // 댓글 관련 상태
   const [replies, setReplies] = useState<Reply[]>([]);
   const [repliesLoading, setRepliesLoading] = useState(false);
@@ -36,18 +36,18 @@ const WarMemoirDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [hasMoreReplies, setHasMoreReplies] = useState(true);
-  
+
   // 댓글 작성 관련 상태
   const [replyTitle, setReplyTitle] = useState('');
   const [replyContent, setReplyContent] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
-  
+
   // 댓글 수정 관련 상태
   const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
   const [updatingReply, setUpdatingReply] = useState(false);
-  
+
   // 댓글 삭제 관련 상태
   const [deletingReplyId, setDeletingReplyId] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -92,20 +92,20 @@ const WarMemoirDetail = () => {
       const pageRequest = {
         page: page,
         size: 10, // 한 번에 10개씩 로드
-        sort: ["createdAt,desc"] // 최신순 정렬
+        sort: ['createdAt,desc'], // 최신순 정렬
       };
 
       const response = await replyService.getReplies(parseInt(id), pageRequest);
 
       if (response.isSuccess && response.result) {
         const newReplies = response.result.content;
-        
+
         if (append) {
           setReplies(prev => [...prev, ...newReplies]);
         } else {
           setReplies(newReplies);
         }
-        
+
         setCurrentPage(page);
         setTotalPages(response.result.totalPages);
         setHasMoreReplies(page + 1 < response.result.totalPages);
@@ -174,24 +174,28 @@ const WarMemoirDetail = () => {
 
     try {
       setUpdatingReply(true);
-      
+
       const replyData: ReplyCreateRequest = {
         title: editTitle.trim(),
         content: editContent.trim(),
       };
 
-      const response = await replyService.updateReply(parseInt(id), replyId, replyData);
-      
+      const response = await replyService.updateReply(
+        parseInt(id),
+        replyId,
+        replyData
+      );
+
       if (response.isSuccess && response.result) {
         alert('댓글이 성공적으로 수정되었습니다.');
-        
+
         // 댓글 목록에서 해당 댓글 업데이트
-        setReplies(prevReplies => 
-          prevReplies.map(reply => 
+        setReplies(prevReplies =>
+          prevReplies.map(reply =>
             reply.id === replyId ? response.result! : reply
           )
         );
-        
+
         // 수정 모드 종료
         cancelEditReply();
       } else {
@@ -234,22 +238,25 @@ const WarMemoirDetail = () => {
 
     try {
       setDeletingReplyId(replyToDelete.id);
-      
-      const response = await replyService.deleteReply(parseInt(id), replyToDelete.id);
-      
+
+      const response = await replyService.deleteReply(
+        parseInt(id),
+        replyToDelete.id
+      );
+
       if (response.isSuccess) {
         alert('댓글이 성공적으로 삭제되었습니다.');
-        
+
         // 댓글 목록에서 해당 댓글 제거
-        setReplies(prevReplies => 
+        setReplies(prevReplies =>
           prevReplies.filter(reply => reply.id !== replyToDelete.id)
         );
-        
+
         // 회고록 댓글 수 업데이트
         if (memoir) {
-          setMemoir({...memoir, replyCount: memoir.replyCount - 1});
+          setMemoir({ ...memoir, replyCount: memoir.replyCount - 1 });
         }
-        
+
         // 모달 닫기
         closeDeleteModal();
       } else {
@@ -265,7 +272,7 @@ const WarMemoirDetail = () => {
   // 댓글 작성 핸들러
   const handleReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!id || !replyTitle.trim() || !replyContent.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
@@ -281,14 +288,14 @@ const WarMemoirDetail = () => {
 
     try {
       setSubmittingReply(true);
-      
+
       const replyData: ReplyCreateRequest = {
         title: replyTitle.trim(),
         content: replyContent.trim(),
       };
 
       const response = await replyService.createReply(parseInt(id), replyData);
-      
+
       if (response.isSuccess) {
         alert('댓글이 성공적으로 작성되었습니다.');
         // 입력 필드 초기화
@@ -298,7 +305,7 @@ const WarMemoirDetail = () => {
         fetchReplies(0, false);
         // 회고록 댓글 수 업데이트를 위해 회고록 정보도 다시 로드
         if (memoir) {
-          setMemoir({...memoir, replyCount: memoir.replyCount + 1});
+          setMemoir({ ...memoir, replyCount: memoir.replyCount + 1 });
         }
       } else {
         alert('댓글 작성에 실패했습니다: ' + response.message);
@@ -344,7 +351,7 @@ const WarMemoirDetail = () => {
             ← 목록으로 돌아가기
           </button>
           <div className='header-actions'>
-            <button 
+            <button
               className='letter-button'
               onClick={() => navigate(`/write-detail/${id}`)}
             >
@@ -410,19 +417,22 @@ const WarMemoirDetail = () => {
             {repliesError && (
               <div className='comments-error'>
                 <p>{repliesError}</p>
-                <button onClick={() => fetchReplies(0, false)} className='retry-button'>
+                <button
+                  onClick={() => fetchReplies(0, false)}
+                  className='retry-button'
+                >
                   다시 시도
                 </button>
               </div>
             )}
-            
+
             {replies.length === 0 && !repliesLoading && !repliesError && (
               <p className='comments-placeholder'>
                 아직 댓글이 없습니다. 첫 댓글을 남겨보세요!
               </p>
             )}
 
-            {replies.map((reply) => (
+            {replies.map(reply => (
               <div key={reply.id} className='comment-item'>
                 <div className='comment-header'>
                   <div className='comment-author'>
@@ -433,25 +443,29 @@ const WarMemoirDetail = () => {
                     <div className='comment-date'>
                       {new Date(reply.createdAt).toLocaleDateString('ko-KR', {
                         year: 'numeric',
-                        month: 'short', 
+                        month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
-                        minute: '2-digit'
+                        minute: '2-digit',
                       })}
                     </div>
                     {canEditReply(reply) && editingReplyId !== reply.id && (
                       <div className='reply-actions'>
-                        <button 
+                        <button
                           onClick={() => startEditReply(reply)}
                           className='edit-reply-button'
-                          disabled={updatingReply || deletingReplyId === reply.id}
+                          disabled={
+                            updatingReply || deletingReplyId === reply.id
+                          }
                         >
                           수정
                         </button>
-                        <button 
+                        <button
                           onClick={() => openDeleteModal(reply)}
                           className='delete-reply-button'
-                          disabled={updatingReply || deletingReplyId === reply.id}
+                          disabled={
+                            updatingReply || deletingReplyId === reply.id
+                          }
                         >
                           {deletingReplyId === reply.id ? '삭제 중...' : '삭제'}
                         </button>
@@ -459,21 +473,21 @@ const WarMemoirDetail = () => {
                     )}
                   </div>
                 </div>
-                
+
                 {editingReplyId === reply.id ? (
                   // 수정 모드 UI
                   <div className='edit-reply-form'>
                     <input
                       type='text'
                       value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
+                      onChange={e => setEditTitle(e.target.value)}
                       className='edit-title-input'
                       placeholder='댓글 제목을 입력해주세요.'
                       disabled={updatingReply}
                     />
                     <textarea
                       value={editContent}
-                      onChange={(e) => setEditContent(e.target.value)}
+                      onChange={e => setEditContent(e.target.value)}
                       className='edit-content-input'
                       placeholder='댓글 내용을 입력해주세요.'
                       rows={4}
@@ -483,7 +497,11 @@ const WarMemoirDetail = () => {
                       <button
                         onClick={() => handleEditReplySubmit(reply.id)}
                         className='save-edit-button'
-                        disabled={updatingReply || !editTitle.trim() || !editContent.trim()}
+                        disabled={
+                          updatingReply ||
+                          !editTitle.trim() ||
+                          !editContent.trim()
+                        }
                       >
                         {updatingReply ? '수정 중...' : '수정 완료'}
                       </button>
@@ -507,12 +525,13 @@ const WarMemoirDetail = () => {
                     </div>
                     {reply.updatedAt !== reply.createdAt && (
                       <div className='comment-updated'>
-                        수정됨: {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
+                        수정됨:{' '}
+                        {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
                           hour: '2-digit',
-                          minute: '2-digit'
+                          minute: '2-digit',
                         })}
                       </div>
                     )}
@@ -524,12 +543,14 @@ const WarMemoirDetail = () => {
             {/* 더 보기 버튼 */}
             {hasMoreReplies && (
               <div className='load-more-container'>
-                <button 
+                <button
                   onClick={loadMoreReplies}
                   disabled={repliesLoading}
                   className='load-more-button'
                 >
-                  {repliesLoading ? '댓글 로딩 중...' : `더 많은 댓글 보기 (${currentPage + 1}/${totalPages})`}
+                  {repliesLoading
+                    ? '댓글 로딩 중...'
+                    : `더 많은 댓글 보기 (${currentPage + 1}/${totalPages})`}
                 </button>
               </div>
             )}
@@ -548,7 +569,7 @@ const WarMemoirDetail = () => {
               placeholder='댓글 제목을 입력해주세요.'
               className='comment-title-input'
               value={replyTitle}
-              onChange={(e) => setReplyTitle(e.target.value)}
+              onChange={e => setReplyTitle(e.target.value)}
               disabled={submittingReply}
               required
             />
@@ -556,17 +577,19 @@ const WarMemoirDetail = () => {
               placeholder='댓글 내용을 입력해주세요.'
               className='comment-input'
               value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
+              onChange={e => setReplyContent(e.target.value)}
               disabled={submittingReply}
               rows={4}
               required
             />
-            <button 
+            <button
               type='submit'
               className='comment-submit'
-              disabled={submittingReply || !replyTitle.trim() || !replyContent.trim()}
+              disabled={
+                submittingReply || !replyTitle.trim() || !replyContent.trim()
+              }
             >
-              {submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
+{submittingReply ? '댓글 작성 중...' : '댓글 등록하기'}
             </button>
           </form>
         </div>
@@ -574,7 +597,7 @@ const WarMemoirDetail = () => {
         {/* 댓글 삭제 확인 모달 */}
         {showDeleteModal && replyToDelete && (
           <div className='modal-overlay' onClick={closeDeleteModal}>
-            <div className='delete-modal' onClick={(e) => e.stopPropagation()}>
+            <div className='delete-modal' onClick={e => e.stopPropagation()}>
               <div className='modal-header'>
                 <h3>댓글 삭제</h3>
               </div>
@@ -582,27 +605,32 @@ const WarMemoirDetail = () => {
                 <p>정말로 이 댓글을 삭제하시겠습니까?</p>
                 <div className='reply-preview'>
                   <strong>"{replyToDelete.title}"</strong>
-                  <p>{replyToDelete.content.length > 50 
-                    ? replyToDelete.content.substring(0, 50) + '...' 
-                    : replyToDelete.content}
+                  <p>
+                    {replyToDelete.content.length > 50
+                      ? replyToDelete.content.substring(0, 50) + '...'
+                      : replyToDelete.content}
                   </p>
                 </div>
-                <p className='warning-text'>삭제된 댓글은 복구할 수 없습니다.</p>
+                <p className='warning-text'>
+                  삭제된 댓글은 복구할 수 없습니다.
+                </p>
               </div>
               <div className='modal-actions'>
-                <button 
+                <button
                   onClick={closeDeleteModal}
                   className='cancel-delete-button'
                   disabled={deletingReplyId === replyToDelete.id}
                 >
                   취소
                 </button>
-                <button 
+                <button
                   onClick={handleDeleteReply}
                   className='confirm-delete-button'
                   disabled={deletingReplyId === replyToDelete.id}
                 >
-                  {deletingReplyId === replyToDelete.id ? '삭제 중...' : '삭제하기'}
+                  {deletingReplyId === replyToDelete.id
+                    ? '삭제 중...'
+                    : '삭제하기'}
                 </button>
               </div>
             </div>

@@ -13,7 +13,6 @@ interface Memoir {
   sectionCount: number;
 }
 
-
 const WarMemoir = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0); // API는 0부터 시작
@@ -142,7 +141,7 @@ const WarMemoir = () => {
         <div className='content-grid'>
           {memoirs.map(memoir => (
             <div key={memoir.id} className='content-card'>
-              <div 
+              <div
                 className='card-image'
                 onClick={() => handleCardClick(memoir.id)}
               >
@@ -153,7 +152,7 @@ const WarMemoir = () => {
                 )}
               </div>
               <div className='card-content'>
-                <div 
+                <div
                   className='card-info'
                   onClick={() => handleCardClick(memoir.id)}
                 >
@@ -166,9 +165,9 @@ const WarMemoir = () => {
                   </p>
                 </div>
                 <div className='card-actions'>
-                  <button 
+                  <button
                     className='write-letter-btn'
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       navigate(`/write-detail/${memoir.id}`);
                     }}

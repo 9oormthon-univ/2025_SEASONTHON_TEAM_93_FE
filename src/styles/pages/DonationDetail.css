@@ -399,7 +399,7 @@
   .image-placeholder:hover {
     background-image: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
   }
-  
+
   .back-button:hover {
     box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
   }
@@ -419,17 +419,17 @@
     margin-top: 0;
     padding: 0;
   }
-  
+
   .back-button,
   .social-share,
   .donate-action {
     display: none;
   }
-  
+
   .detail-content {
     grid-template-columns: 1fr;
   }
-  
+
   .sidebar-image-placeholder {
     display: none;
   }

@@ -50,8 +50,8 @@ const Header = () => {
         <nav className='nav'>
           <ul className='nav-list'>
             <li>
-              <Link 
-                to='/' 
+              <Link
+                to='/'
                 className={`nav-link ${location.pathname === '/' ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
@@ -68,8 +68,8 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to='/donation' 
+              <Link
+                to='/donation'
                 className={`nav-link ${location.pathname === '/donation' ? 'nav-link-highlighted' : ''}`}
               >
                 <svg
@@ -142,7 +142,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        
+
         {/* 로그인/로그아웃 영역 */}
         <div className='auth-section'>
           {isLoggedIn ? (

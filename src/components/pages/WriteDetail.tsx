@@ -2,7 +2,7 @@ import '../../styles/pages/WriteDetail.css';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { letterService } from '../../services';
-import type { LetterCreateRequest } from '../../types/api';
+import type { LetterCreateRequest } from '../../types/api/letter';
 
 const WriteDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,7 +12,7 @@ const WriteDetail = () => {
     title: '',
     content: '',
   });
-  
+
   const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (
@@ -27,7 +27,7 @@ const WriteDetail = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!id || !formData.title.trim() || !formData.content.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
@@ -43,7 +43,7 @@ const WriteDetail = () => {
 
     try {
       setSubmitting(true);
-      
+
       const letterData: LetterCreateRequest = {
         title: formData.title.trim(),
         content: formData.content.trim(),
@@ -51,9 +51,11 @@ const WriteDetail = () => {
       };
 
       const response = await letterService.createLetter(letterData);
-      
+
       if (response.isSuccess && response.result) {
-        alert(`편지가 성공적으로 전송되었습니다!\n"${response.result.warMemoir.title}"에 대한 편지가 작성되었습니다.`);
+        alert(
+          `편지가 성공적으로 전송되었습니다!\n"${response.result.warMemoir.title}"에 대한 편지가 작성되었습니다.`
+        );
         navigate('/write-letter');
       } else {
         alert('편지 전송에 실패했습니다: ' + response.message);
@@ -79,7 +81,6 @@ const WriteDetail = () => {
         </div>
 
         <form onSubmit={handleSubmit} className='letter-form'>
-
           <div className='form-group'>
             <label htmlFor='title'>제목*</label>
             <input
@@ -115,10 +116,12 @@ const WriteDetail = () => {
             >
               뒤로가기
             </button>
-            <button 
-              type='submit' 
+            <button
+              type='submit'
               className='btn-send'
-              disabled={submitting || !formData.title.trim() || !formData.content.trim()}
+              disabled={
+                submitting || !formData.title.trim() || !formData.content.trim()
+              }
             >
               <span>{submitting ? '편지 전송 중...' : '마음 전달하기'}</span>
               {!submitting && (
@@ -132,7 +135,8 @@ const WriteDetail = () => {
                   <line x1='22' y1='2' x2='11' y2='13' />
                   <polygon points='22,2 15,22 11,13 2,9 22,2' />
                 </svg>
-              )}</button>
+              )}
+            </button>
           </div>
         </form>
       </div>

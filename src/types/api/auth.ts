@@ -1,4 +1,4 @@
-import { ApiResponse } from './common';
+import type { ApiResponse } from './common';
 
 // 사용자 정보
 export interface User {

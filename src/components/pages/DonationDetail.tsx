@@ -26,7 +26,9 @@ interface DonationDetailData {
 const DonationDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [donationData, setDonationData] = useState<DonationDetailData | null>(null);
+  const [donationData, setDonationData] = useState<DonationDetailData | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [showDonationModal, setShowDonationModal] = useState(false);
 
@@ -34,34 +36,86 @@ const DonationDetail = () => {
     // 실제로는 API에서 데이터를 가져올 예정
     const fetchDonationDetail = async () => {
       setLoading(true);
-      
-      // 임시 데이터 (나중에 API 호출로 대체)
-      const mockData: DonationDetailData = {
-        id: parseInt(id || '1'),
-        title: "제목 (후원하기)",
-        description: "(재)혹 들어갈 곳)first title - 상세 설명",
-        detailContent: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. and more recently with desktop publishing
-software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`,
-        author: {
-          name: "예윤",
-          profileImage: undefined
+      // 임시 데이터 (나중에 API 호출로 대체)
+      const donationId = parseInt(id || '1');
+      const donationProjects = [
+        {
+          id: 1,
+          title: '6.25 참전용사 의료지원 프로젝트',
+          description: '고령의 참전용사들을 위한 전문 의료진 파견 및 의료비 지원 사업',
+          detailContent: `우리나라의 자유와 평화를 지키기 위해 목숨을 걸고 싸우신 6.25 참전용사 어르신들이 고령으로 인해 각종 질병과 의료비 부담으로 어려움을 겪고 계십니다.
+
+본 프로젝트는 이러한 어르신들께 전문 의료진을 파견하여 정기적인 건강검진과 치료 서비스를 제공하고, 경제적 부담을 덜어드리기 위해 의료비를 지원하는 사업입니다.
+
+▶ 주요 지원 내용
+• 월 1회 전문의 방문 진료 서비스
+• 정기 건강검진 (연 2회)
+• 응급의료비 100% 지원
+• 만성질환 치료비 80% 지원
+• 재활치료 및 물리치료 서비스
+
+▶ 지원 현황 (2024년 기준)
+• 지원 대상: 6.25 참전용사 500명
+• 총 모금 목표: 8억원
+• 현재 모금액: 6억 3천만원 (79% 달성)
+• 의료진 파견: 전국 15개 지역
+
+어르신들의 건강한 노후를 위해 여러분의 따뜻한 마음을 모아주세요. 작은 정성이 모여 큰 사랑이 됩니다.`,
+          author: {
+            name: '대한민국재향군인회',
+            profileImage: undefined,
+          },
+          period: '2024.01.01 ~ 2024.12.31',
+          websiteUrl: 'www.koreanveterans.or.kr',
+          contact: '02-123-4567',
         },
-        period: "2023.06.30 ~ 2024.06.30",
-        websiteUrl: "www.000000.00.000/000000",
+        {
+          id: 2,
+          title: '전쟁기념관 보존 및 교육 사업',
+          description: '후세에게 평화의 소중함을 전하기 위한 전쟁기념관 유물 보존과 청소년 평화교육',
+          detailContent: `전쟁의 참혹함과 평화의 소중함을 후세에 올바르게 전달하기 위해 전쟁기념관의 소중한 유물들을 보존하고, 청소년들에게 살아있는 역사교육을 제공하는 사업입니다.
+
+▶ 사업 목표
+• 전쟁 관련 유물 및 자료의 디지털화 보존
+• 청소년 대상 평화교육 프로그램 운영
+• 참전용사 구술사 기록 및 보존
+• 평화통일 의식 확산
+
+▶ 주요 활동
+• 유물 보존 및 복원: 연간 100점 이상
+• 청소년 교육: 월 500명 대상 프로그램 운영
+• 체험학습: VR/AR 기술을 활용한 전쟁체험
+• 평화 캠프: 방학 중 1박 2일 평화캠프 운영
+
+▶ 기대 효과
+역사를 잊은 민족에게 미래는 없습니다. 우리의 아픈 역사를 기억하고 평화의 소중함을 깨달을 때, 진정한 평화통일의 기반이 마련될 것입니다.`,
+          author: {
+            name: '전쟁기념사업회',
+            profileImage: undefined,
+          },
+          period: '2024.03.01 ~ 2025.02.28',
+          websiteUrl: 'www.warmemorial.or.kr',
+          contact: '02-789-0123',
+        }
+      ];
+
+      const mockData: DonationDetailData = donationProjects.find(p => p.id === donationId) || donationProjects[0];
+      
+      const detailData: DonationDetailData = {
+        ...mockData,
         images: [], // 이미지들은 나중에 실제 URL로 대체
         socialLinks: {
-          facebook: "https://facebook.com/example",
-          twitter: "https://twitter.com/example",
-          pinterest: "https://pinterest.com/example",
-          email: "mailto:example@email.com"
-        }
+          facebook: 'https://facebook.com/koreanveterans',
+          twitter: 'https://twitter.com/koreanveterans',
+          pinterest: 'https://pinterest.com/koreanveterans',
+          email: 'mailto:support@koreanveterans.or.kr',
+        },
       };
 
       // 실제 API 호출 시뮬레이션
       setTimeout(() => {
-        setDonationData(mockData);
+        setDonationData(detailData);
         setLoading(false);
       }, 500);
     };
@@ -84,16 +138,25 @@ software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`
   const handleSocialShare = (platform: string) => {
     const currentUrl = window.location.href;
     const title = donationData?.title || '';
-    
+
     switch (platform) {
       case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank');
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+          '_blank'
+        );
         break;
       case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}`, '_blank');
+        window.open(
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}`,
+          '_blank'
+        );
         break;
       case 'pinterest':
-        window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentUrl)}&description=${encodeURIComponent(title)}`, '_blank');
+        window.open(
+          `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentUrl)}&description=${encodeURIComponent(title)}`,
+          '_blank'
+        );
         break;
       case 'email':
         window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`${title}\n${currentUrl}`)}`;
@@ -103,17 +166,17 @@ software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`
 
   if (loading) {
     return (
-      <div className="donation-detail-loading">
-        <div className="loading-spinner">로딩 중...</div>
+      <div className='donation-detail-loading'>
+        <div className='loading-spinner'>로딩 중...</div>
       </div>
     );
   }
 
   if (!donationData) {
     return (
-      <div className="donation-detail-error">
+      <div className='donation-detail-error'>
         <h2>후원 정보를 찾을 수 없습니다.</h2>
-        <button onClick={handleBackClick} className="back-button">
+        <button onClick={handleBackClick} className='back-button'>
           목록으로 돌아가기
         </button>
       </div>
@@ -121,58 +184,58 @@ software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`
   }
 
   return (
-    <main className="donation-detail-page">
-      <div className="donation-detail-container">
+    <main className='donation-detail-page'>
+      <div className='donation-detail-container'>
         {/* 뒤로가기 버튼 */}
-        <div className="detail-header">
-          <button onClick={handleBackClick} className="back-button">
+        <div className='detail-header'>
+          <button onClick={handleBackClick} className='back-button'>
             ← 목록으로
           </button>
         </div>
 
         {/* 제목 */}
-        <h1 className="detail-title">{donationData.title}</h1>
+        <h1 className='detail-title'>{donationData.title}</h1>
 
         {/* 이미지 갤러리 */}
-        <div className="image-gallery">
-          <div className="main-image">
+        <div className='image-gallery'>
+          <div className='main-image'>
             {/* 메인 이미지 - 실제로는 donationData.images[0] 사용 */}
-            <div className="image-placeholder main-placeholder">
+            <div className='image-placeholder main-placeholder'>
               메인 이미지
             </div>
           </div>
-          <div className="sub-images">
-            <div className="image-placeholder sub-placeholder">
+          <div className='sub-images'>
+            <div className='image-placeholder sub-placeholder'>
               서브 이미지 1
             </div>
-            <div className="image-placeholder sub-placeholder">
+            <div className='image-placeholder sub-placeholder'>
               서브 이미지 2
             </div>
           </div>
         </div>
 
         {/* 소셜 공유 버튼들 */}
-        <div className="social-share">
-          <button 
-            className="social-btn facebook-btn"
+        <div className='social-share'>
+          <button
+            className='social-btn facebook-btn'
             onClick={() => handleSocialShare('facebook')}
           >
             facebook
           </button>
-          <button 
-            className="social-btn twitter-btn"
+          <button
+            className='social-btn twitter-btn'
             onClick={() => handleSocialShare('twitter')}
           >
             Tweet
           </button>
-          <button 
-            className="social-btn pinterest-btn"
+          <button
+            className='social-btn pinterest-btn'
             onClick={() => handleSocialShare('pinterest')}
           >
             Pin
           </button>
-          <button 
-            className="social-btn email-btn"
+          <button
+            className='social-btn email-btn'
             onClick={() => handleSocialShare('email')}
           >
             Email
@@ -180,43 +243,38 @@ software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`
         </div>
 
         {/* 상세 내용 */}
-        <div className="detail-content">
-          <div className="content-text">
+        <div className='detail-content'>
+          <div className='content-text'>
             {donationData.detailContent.split('\n').map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>
-          
-          <div className="content-sidebar">
-            <div className="sidebar-image-placeholder">
-              사이드바 이미지
-            </div>
+
+          <div className='content-sidebar'>
+            <div className='sidebar-image-placeholder'>사이드바 이미지</div>
           </div>
         </div>
 
         {/* 후원하기 버튼 */}
-        <div className="donate-action">
-          <button 
-            className="donate-main-button"
-            onClick={handleDonateClick}
-          >
+        <div className='donate-action'>
+          <button className='donate-main-button' onClick={handleDonateClick}>
             후원하기
           </button>
         </div>
 
         {/* 추가 정보 */}
-        <div className="additional-info">
-          <div className="info-item">
-            <span className="info-label">후원 기간:</span>
-            <span className="info-value">{donationData.period}</span>
+        <div className='additional-info'>
+          <div className='info-item'>
+            <span className='info-label'>후원 기간:</span>
+            <span className='info-value'>{donationData.period}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">후원 사이트:</span>
-            <span className="info-value">{donationData.websiteUrl}</span>
+          <div className='info-item'>
+            <span className='info-label'>후원 사이트:</span>
+            <span className='info-value'>{donationData.websiteUrl}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">담당자:</span>
-            <span className="info-value">{donationData.author.name}</span>
+          <div className='info-item'>
+            <span className='info-label'>담당자:</span>
+            <span className='info-value'>{donationData.author.name}</span>
           </div>
         </div>
 
@@ -224,13 +282,17 @@ software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is.`
         <DonationModal
           isOpen={showDonationModal}
           onClose={handleCloseModal}
-          donationData={donationData ? {
-            id: donationData.id,
-            title: donationData.title,
-            currentAmount: 63370000,
-            targetAmount: 80000000,
-            authorName: donationData.author.name
-          } : undefined}
+          donationData={
+            donationData
+              ? {
+                  id: donationData.id,
+                  title: donationData.title,
+                  currentAmount: 63370000,
+                  targetAmount: 80000000,
+                  authorName: donationData.author.name,
+                }
+              : undefined
+          }
         />
       </div>
     </main>

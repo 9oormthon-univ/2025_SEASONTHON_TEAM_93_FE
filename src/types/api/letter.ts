@@ -1,4 +1,4 @@
-import { ApiResponse } from './common';
+import type { ApiResponse } from './common';
 
 // 편지 데이터
 export interface LetterData {

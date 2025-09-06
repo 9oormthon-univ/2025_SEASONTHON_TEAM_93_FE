@@ -1,11 +1,9 @@
 import api from './axiosConfig';
 import type {
   Memoir,
-  MemoirDetail,
-  MemoirPageResponse,
   MemoirListResponse,
   MemoirDetailResponse,
-} from '../types/api';
+} from '../types/api/memoir';
 
 // 회고록 관련 API 서비스
 export const memoirService = {

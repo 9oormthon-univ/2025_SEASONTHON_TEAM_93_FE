@@ -2,7 +2,7 @@ import '../../styles/pages/WriteLetter.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { letterService } from '../../services';
-import type { LetterListItem } from '../../types/api';
+import type { LetterListItem } from '../../types/api/letter';
 
 const WriteLetter = () => {
   const navigate = useNavigate();
@@ -17,7 +17,9 @@ const WriteLetter = () => {
   // 편지 삭제 관련 상태
   const [deletingLetterId, setDeletingLetterId] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [letterToDelete, setLetterToDelete] = useState<LetterListItem | null>(null);
+  const [letterToDelete, setLetterToDelete] = useState<LetterListItem | null>(
+    null
+  );
 
   // 편지 수정 관련 상태
   const [editingLetterId, setEditingLetterId] = useState<number | null>(null);
@@ -35,7 +37,7 @@ const WriteLetter = () => {
       const pageRequest = {
         page: page,
         size: itemsPerPage,
-        sort: ["createdAt,desc"] // 최신순 정렬
+        sort: ['createdAt,desc'], // 최신순 정렬
       };
 
       const response = await letterService.getLetters(pageRequest);
@@ -81,7 +83,7 @@ const WriteLetter = () => {
       console.log('Debug Delete Attempt:', {
         userEmail,
         letterAuthorName: letter.authorName,
-        letterTitle: letter.title
+        letterTitle: letter.title,
       });
       alert('본인이 작성한 편지만 삭제할 수 있습니다.');
       return;
@@ -110,23 +112,23 @@ const WriteLetter = () => {
 
     try {
       setDeletingLetterId(letterToDelete.id);
-      
+
       const response = await letterService.deleteLetter(letterToDelete.id);
-      
+
       if (response.isSuccess) {
         alert('편지가 성공적으로 삭제되었습니다.');
-        
+
         // 편지 목록에서 해당 편지 제거
-        setLetters(prevLetters => 
+        setLetters(prevLetters =>
           prevLetters.filter(letter => letter.id !== letterToDelete.id)
         );
-        
+
         // 총 편지 수 업데이트
         setTotalElements(prev => prev - 1);
-        
+
         // 모달 닫기
         closeDeleteModal();
-        
+
         // 현재 페이지에 편지가 없으면 이전 페이지로
         if (letters.length === 1 && currentPage > 0) {
           fetchLetters(currentPage - 1);
@@ -149,7 +151,7 @@ const WriteLetter = () => {
       alert('본인이 작성한 편지만 수정할 수 있습니다.');
       return;
     }
-    
+
     setEditingLetterId(letter.id);
     setEditTitle(letter.title);
     setEditContent(letter.contentPreview); // contentPreview만 있으므로 임시로 사용
@@ -182,34 +184,35 @@ const WriteLetter = () => {
 
     try {
       setUpdatingLetter(true);
-      
+
       const updateData = {
         title: editTitle.trim(),
         content: editContent.trim(),
-        warMemoirId: editWarMemoirId
+        warMemoirId: editWarMemoirId,
       };
-      
+
       const response = await letterService.updateLetter(letterId, updateData);
-      
+
       if (response.isSuccess && response.result) {
         alert('편지가 성공적으로 수정되었습니다.');
-        
+
         // 편지 목록에서 해당 편지 업데이트
-        setLetters(prevLetters => 
-          prevLetters.map(letter => 
-            letter.id === letterId 
+        setLetters(prevLetters =>
+          prevLetters.map(letter =>
+            letter.id === letterId
               ? {
                   ...letter,
                   title: response.result!.title,
-                  contentPreview: response.result!.content.length > 100 
-                    ? response.result!.content.substring(0, 100) + '...'
-                    : response.result!.content,
-                  updatedAt: response.result!.updatedAt
+                  contentPreview:
+                    response.result!.content.length > 100
+                      ? response.result!.content.substring(0, 100) + '...'
+                      : response.result!.content,
+                  updatedAt: response.result!.updatedAt,
                 }
               : letter
           )
         );
-        
+
         // 수정 모드 종료
         cancelEditLetter();
       } else {
@@ -243,7 +246,10 @@ const WriteLetter = () => {
     );
 
     // 페이지 번호 버튼들
-    let startPage = Math.max(1, displayCurrentPage - Math.floor(maxVisiblePages / 2));
+    let startPage = Math.max(
+      1,
+      displayCurrentPage - Math.floor(maxVisiblePages / 2)
+    );
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
@@ -326,38 +332,41 @@ const WriteLetter = () => {
             letters.map(letter => {
               const userEmail = localStorage.getItem('userEmail');
               const canDelete = userEmail === letter.authorName;
-              
-              
+
               return (
                 <div key={letter.id} className='project-card'>
                   {editingLetterId === letter.id ? (
                     // 수정 모드 UI
                     <div className='edit-letter-form'>
-                      <input 
+                      <input
                         type='text'
                         value={editTitle}
-                        onChange={(e) => setEditTitle(e.target.value)}
+                        onChange={e => setEditTitle(e.target.value)}
                         className='edit-title-input'
                         placeholder='편지 제목을 입력해주세요.'
                         disabled={updatingLetter}
                       />
-                      <textarea 
+                      <textarea
                         value={editContent}
-                        onChange={(e) => setEditContent(e.target.value)}
+                        onChange={e => setEditContent(e.target.value)}
                         className='edit-content-input'
                         placeholder='편지 내용을 입력해주세요.'
                         rows={6}
                         disabled={updatingLetter}
                       />
                       <div className='edit-letter-actions'>
-                        <button 
+                        <button
                           onClick={() => handleEditLetterSubmit(letter.id)}
                           className='save-edit-button'
-                          disabled={updatingLetter || !editTitle.trim() || !editContent.trim()}
+                          disabled={
+                            updatingLetter ||
+                            !editTitle.trim() ||
+                            !editContent.trim()
+                          }
                         >
                           {updatingLetter ? '수정 중...' : '수정 완료'}
                         </button>
-                        <button 
+                        <button
                           onClick={cancelEditLetter}
                           className='cancel-edit-button'
                           disabled={updatingLetter}
@@ -369,15 +378,19 @@ const WriteLetter = () => {
                   ) : (
                     // 일반 표시 모드 UI
                     <>
-                      <div 
+                      <div
                         className='card-content-area'
                         onClick={() => handleCardClick(letter.id)}
                       >
                         <h3 className='project-title'>{letter.title}</h3>
                         <div className='letter-info'>
                           <div className='author-info'>
-                            <span className='author-name'>작성자: {letter.authorName}</span>
-                            <span className={`completion-status ${letter.isCompleted ? 'completed' : 'pending'}`}>
+                            <span className='author-name'>
+                              작성자: {letter.authorName}
+                            </span>
+                            <span
+                              className={`completion-status ${letter.isCompleted ? 'completed' : 'pending'}`}
+                            >
                               {letter.isCompleted ? '완료' : '진행중'}
                             </span>
                           </div>
@@ -385,41 +398,52 @@ const WriteLetter = () => {
                             관련 회고록: {letter.warMemoirTitle}
                           </div>
                         </div>
-                        <p className='project-description'>{letter.contentPreview}</p>
+                        <p className='project-description'>
+                          {letter.contentPreview}
+                        </p>
                         <div className='letter-date'>
-                          {new Date(letter.createdAt).toLocaleDateString('ko-KR', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                          {new Date(letter.createdAt).toLocaleDateString(
+                            'ko-KR',
+                            {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            }
+                          )}
                           {letter.updatedAt !== letter.createdAt && (
                             <span className='updated-indicator'> (수정됨)</span>
                           )}
                         </div>
                       </div>
-                      
+
                       {/* 수정/삭제 버튼 (본인 편지만) */}
                       {canDelete && (
                         <div className='letter-actions'>
-                          <button 
-                            onClick={(e) => {
+                          <button
+                            onClick={e => {
                               e.stopPropagation();
                               startEditLetter(letter);
                             }}
                             className='edit-letter-button'
-                            disabled={updatingLetter || deletingLetterId === letter.id}
+                            disabled={
+                              updatingLetter || deletingLetterId === letter.id
+                            }
                           >
                             ✏️ 수정
                           </button>
-                          <button 
-                            onClick={(e) => {
+                          <button
+                            onClick={e => {
                               e.stopPropagation();
                               openDeleteModal(letter);
                             }}
                             className='delete-letter-button'
-                            disabled={updatingLetter || deletingLetterId === letter.id}
+                            disabled={
+                              updatingLetter || deletingLetterId === letter.id
+                            }
                           >
-                            {deletingLetterId === letter.id ? '삭제 중...' : '🗑️ 삭제'}
+                            {deletingLetterId === letter.id
+                              ? '삭제 중...'
+                              : '🗑️ 삭제'}
                           </button>
                         </div>
                       )}
@@ -439,7 +463,7 @@ const WriteLetter = () => {
         {/* 편지 삭제 확인 모달 */}
         {showDeleteModal && letterToDelete && (
           <div className='modal-overlay' onClick={closeDeleteModal}>
-            <div className='delete-modal' onClick={(e) => e.stopPropagation()}>
+            <div className='delete-modal' onClick={e => e.stopPropagation()}>
               <div className='modal-header'>
                 <h3>편지 삭제</h3>
               </div>
@@ -450,25 +474,34 @@ const WriteLetter = () => {
                   <p>{letterToDelete.contentPreview}</p>
                   <div className='letter-meta'>
                     <span>회고록: {letterToDelete.warMemoirTitle}</span>
-                    <span>작성일: {new Date(letterToDelete.createdAt).toLocaleDateString('ko-KR')}</span>
+                    <span>
+                      작성일:{' '}
+                      {new Date(letterToDelete.createdAt).toLocaleDateString(
+                        'ko-KR'
+                      )}
+                    </span>
                   </div>
                 </div>
-                <p className='warning-text'>삭제된 편지는 복구할 수 없습니다.</p>
+                <p className='warning-text'>
+                  삭제된 편지는 복구할 수 없습니다.
+                </p>
               </div>
               <div className='modal-actions'>
-                <button 
+                <button
                   onClick={closeDeleteModal}
                   className='cancel-delete-button'
                   disabled={deletingLetterId === letterToDelete.id}
                 >
                   취소
                 </button>
-                <button 
+                <button
                   onClick={handleDeleteLetter}
                   className='confirm-delete-button'
                   disabled={deletingLetterId === letterToDelete.id}
                 >
-                  {deletingLetterId === letterToDelete.id ? '삭제 중...' : '삭제하기'}
+                  {deletingLetterId === letterToDelete.id
+                    ? '삭제 중...'
+                    : '삭제하기'}
                 </button>
               </div>
             </div>

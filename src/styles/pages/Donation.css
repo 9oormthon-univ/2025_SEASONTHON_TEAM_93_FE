@@ -86,7 +86,7 @@
 }
 
 .card-image-placeholder::before {
-  content: "이미지 영역";
+  content: '이미지 영역';
   position: absolute;
   opacity: 0.6;
 }
@@ -395,7 +395,7 @@
   .donation-card:hover .card-title {
     color: #3b82f6;
   }
-  
+
   .donation-card:hover .website-url {
     color: #1d4ed8;
   }
