@@ -109,7 +109,7 @@ const MyPage = () => {
   // 댓글 렌더링 컴포넌트
   const renderComments = () => (
     <div className='content-list'>
-      {comments.map((comment) => (
+      {comments.map(comment => (
         <div key={comment.id} className='content-item'>
           <div className='item-header'>
             <h3 className='item-title'>{comment.title}</h3>
@@ -154,7 +154,7 @@ const MyPage = () => {
   // 편지 렌더링 컴포넌트
   const renderLetters = () => (
     <div className='content-list'>
-      {letters.map((letter) => (
+      {letters.map(letter => (
         <div key={letter.id} className='content-item'>
           <div className='item-header'>
             <h3 className='item-title'>{letter.title}</h3>
@@ -199,7 +199,7 @@ const MyPage = () => {
   // 후원 현황 렌더링 컴포넌트
   const renderSponsorships = () => (
     <div className='content-list'>
-      {sponsorships.map((sponsorship) => (
+      {sponsorships.map(sponsorship => (
         <div key={sponsorship.id} className='content-item'>
           <div className='item-header'>
             <h3 className='item-title'>{sponsorship.title}</h3>
@@ -211,9 +211,7 @@ const MyPage = () => {
 
           <div className='item-actions'>
             {sponsorship.status === 'in_progress' ? (
-              <div className='sponsorship-status'>
-                후원 진행 중
-              </div>
+              <div className='sponsorship-status'>후원 진행 중</div>
             ) : (
               <div className='sponsorship-buttons'>
                 <button className='btn-review'>후원 후기 보러가기</button>
@@ -262,7 +260,9 @@ const MyPage = () => {
           <label htmlFor='address'>주소</label>
           <input type='text' id='address' defaultValue='서울시 강남구' />
         </div>
-        <button type='submit' className='btn-save'>저장하기</button>
+        <button type='submit' className='btn-save'>
+          저장하기
+        </button>
       </form>
     </div>
   );
@@ -274,7 +274,11 @@ const MyPage = () => {
       <form className='inquiry-form'>
         <div className='form-group'>
           <label htmlFor='inquiry-title'>제목</label>
-          <input type='text' id='inquiry-title' placeholder='문의 제목을 입력해주세요' />
+          <input
+            type='text'
+            id='inquiry-title'
+            placeholder='문의 제목을 입력해주세요'
+          />
         </div>
         <div className='form-group'>
           <label htmlFor='inquiry-content'>내용</label>
@@ -284,7 +288,9 @@ const MyPage = () => {
             placeholder='문의 내용을 입력해주세요'
           ></textarea>
         </div>
-        <button type='submit' className='btn-submit'>문의하기</button>
+        <button type='submit' className='btn-submit'>
+          문의하기
+        </button>
       </form>
     </div>
   );
@@ -335,7 +341,7 @@ const MyPage = () => {
 
         <div className='sidebar'>
           <nav className='sidebar-nav'>
-            {navigationItems.map((item) => (
+            {navigationItems.map(item => (
               <div
                 key={item}
                 className={`nav-item ${activeSection === item ? 'active' : ''}`}
