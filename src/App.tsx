@@ -13,7 +13,8 @@ function App() {
       <div className='app'>
         <Header />
         <Routes>
-          <Route path='/' element={<WarMemoir />} />
+          <Route path='/' element={<KakaoLogin />} />
+          <Route path='/home' element={<WarMemoir />} />
           <Route path='/memoir/:id' element={<WarMemoirDetail />} />
           <Route path='/write-letter' element={<WriteLetter />} />
           <Route path='/write-detail/:id' element={<WriteDetail />} />
