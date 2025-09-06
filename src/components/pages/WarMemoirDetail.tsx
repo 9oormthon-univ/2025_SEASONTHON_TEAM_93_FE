@@ -41,6 +41,17 @@ const WarMemoirDetail = () => {
   const [replyTitle, setReplyTitle] = useState('');
   const [replyContent, setReplyContent] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
+  
+  // 댓글 수정 관련 상태
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [updatingReply, setUpdatingReply] = useState(false);
+  
+  // 댓글 삭제 관련 상태
+  const [deletingReplyId, setDeletingReplyId] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [replyToDelete, setReplyToDelete] = useState<Reply | null>(null);
 
   useEffect(() => {
     const fetchMemoirDetail = async () => {
@@ -119,6 +130,135 @@ const WarMemoirDetail = () => {
   const loadMoreReplies = () => {
     if (hasMoreReplies && !repliesLoading) {
       fetchReplies(currentPage + 1, true);
+    }
+  };
+
+  // 댓글 작성자 권한 체크
+  const canEditReply = (reply: Reply): boolean => {
+    const userEmail = localStorage.getItem('userEmail');
+    return userEmail === reply.author.email;
+  };
+
+  // 댓글 수정 모드 시작
+  const startEditReply = (reply: Reply) => {
+    if (!canEditReply(reply)) {
+      alert('본인이 작성한 댓글만 수정할 수 있습니다.');
+      return;
+    }
+    setEditingReplyId(reply.id);
+    setEditTitle(reply.title);
+    setEditContent(reply.content);
+  };
+
+  // 댓글 수정 취소
+  const cancelEditReply = () => {
+    setEditingReplyId(null);
+    setEditTitle('');
+    setEditContent('');
+  };
+
+  // 댓글 수정 제출
+  const handleEditReplySubmit = async (replyId: number) => {
+    if (!id || !editTitle.trim() || !editContent.trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setUpdatingReply(true);
+      
+      const replyData: ReplyCreateRequest = {
+        title: editTitle.trim(),
+        content: editContent.trim(),
+      };
+
+      const response = await replyService.updateReply(parseInt(id), replyId, replyData);
+      
+      if (response.isSuccess && response.result) {
+        alert('댓글이 성공적으로 수정되었습니다.');
+        
+        // 댓글 목록에서 해당 댓글 업데이트
+        setReplies(prevReplies => 
+          prevReplies.map(reply => 
+            reply.id === replyId ? response.result! : reply
+          )
+        );
+        
+        // 수정 모드 종료
+        cancelEditReply();
+      } else {
+        alert('댓글 수정에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 수정 중 오류가 발생했습니다.');
+    } finally {
+      setUpdatingReply(false);
+    }
+  };
+
+  // 댓글 삭제 모달 열기
+  const openDeleteModal = (reply: Reply) => {
+    if (!canEditReply(reply)) {
+      alert('본인이 작성한 댓글만 삭제할 수 있습니다.');
+      return;
+    }
+    setReplyToDelete(reply);
+    setShowDeleteModal(true);
+  };
+
+  // 댓글 삭제 모달 닫기
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setReplyToDelete(null);
+  };
+
+  // 댓글 삭제 확인
+  const handleDeleteReply = async () => {
+    if (!id || !replyToDelete) return;
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setDeletingReplyId(replyToDelete.id);
+      
+      const response = await replyService.deleteReply(parseInt(id), replyToDelete.id);
+      
+      if (response.isSuccess) {
+        alert('댓글이 성공적으로 삭제되었습니다.');
+        
+        // 댓글 목록에서 해당 댓글 제거
+        setReplies(prevReplies => 
+          prevReplies.filter(reply => reply.id !== replyToDelete.id)
+        );
+        
+        // 회고록 댓글 수 업데이트
+        if (memoir) {
+          setMemoir({...memoir, replyCount: memoir.replyCount - 1});
+        }
+        
+        // 모달 닫기
+        closeDeleteModal();
+      } else {
+        alert('댓글 삭제에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('댓글 삭제 중 오류가 발생했습니다.');
+    } finally {
+      setDeletingReplyId(null);
     }
   };
 
@@ -286,32 +426,94 @@ const WarMemoirDetail = () => {
                     <span className='author-name'>{reply.author.name}</span>
                     <span className='author-email'>({reply.author.email})</span>
                   </div>
-                  <div className='comment-date'>
-                    {new Date(reply.createdAt).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: 'short', 
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                  <div className='comment-meta-right'>
+                    <div className='comment-date'>
+                      {new Date(reply.createdAt).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'short', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </div>
+                    {canEditReply(reply) && editingReplyId !== reply.id && (
+                      <div className='reply-actions'>
+                        <button 
+                          onClick={() => startEditReply(reply)}
+                          className='edit-reply-button'
+                          disabled={updatingReply || deletingReplyId === reply.id}
+                        >
+                          수정
+                        </button>
+                        <button 
+                          onClick={() => openDeleteModal(reply)}
+                          className='delete-reply-button'
+                          disabled={updatingReply || deletingReplyId === reply.id}
+                        >
+                          {deletingReplyId === reply.id ? '삭제 중...' : '삭제'}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <h4 className='comment-title'>{reply.title}</h4>
-                <div className='comment-content'>
-                  {reply.content.split('\n').map((line, index) => (
-                    <p key={index}>{line}</p>
-                  ))}
-                </div>
-                {reply.updatedAt !== reply.createdAt && (
-                  <div className='comment-updated'>
-                    수정됨: {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                
+                {editingReplyId === reply.id ? (
+                  // 수정 모드 UI
+                  <div className='edit-reply-form'>
+                    <input
+                      type='text'
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className='edit-title-input'
+                      placeholder='댓글 제목을 입력해주세요.'
+                      disabled={updatingReply}
+                    />
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className='edit-content-input'
+                      placeholder='댓글 내용을 입력해주세요.'
+                      rows={4}
+                      disabled={updatingReply}
+                    />
+                    <div className='edit-reply-actions'>
+                      <button
+                        onClick={() => handleEditReplySubmit(reply.id)}
+                        className='save-edit-button'
+                        disabled={updatingReply || !editTitle.trim() || !editContent.trim()}
+                      >
+                        {updatingReply ? '수정 중...' : '수정 완료'}
+                      </button>
+                      <button
+                        onClick={cancelEditReply}
+                        className='cancel-edit-button'
+                        disabled={updatingReply}
+                      >
+                        취소
+                      </button>
+                    </div>
                   </div>
+                ) : (
+                  // 일반 표시 모드 UI
+                  <>
+                    <h4 className='comment-title'>{reply.title}</h4>
+                    <div className='comment-content'>
+                      {reply.content.split('\n').map((line, index) => (
+                        <p key={index}>{line}</p>
+                      ))}
+                    </div>
+                    {reply.updatedAt !== reply.createdAt && (
+                      <div className='comment-updated'>
+                        수정됨: {new Date(reply.updatedAt).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             ))}
@@ -365,6 +567,44 @@ const WarMemoirDetail = () => {
             </button>
           </form>
         </div>
+
+        {/* 댓글 삭제 확인 모달 */}
+        {showDeleteModal && replyToDelete && (
+          <div className='modal-overlay' onClick={closeDeleteModal}>
+            <div className='delete-modal' onClick={(e) => e.stopPropagation()}>
+              <div className='modal-header'>
+                <h3>댓글 삭제</h3>
+              </div>
+              <div className='modal-content'>
+                <p>정말로 이 댓글을 삭제하시겠습니까?</p>
+                <div className='reply-preview'>
+                  <strong>"{replyToDelete.title}"</strong>
+                  <p>{replyToDelete.content.length > 50 
+                    ? replyToDelete.content.substring(0, 50) + '...' 
+                    : replyToDelete.content}
+                  </p>
+                </div>
+                <p className='warning-text'>삭제된 댓글은 복구할 수 없습니다.</p>
+              </div>
+              <div className='modal-actions'>
+                <button 
+                  onClick={closeDeleteModal}
+                  className='cancel-delete-button'
+                  disabled={deletingReplyId === replyToDelete.id}
+                >
+                  취소
+                </button>
+                <button 
+                  onClick={handleDeleteReply}
+                  className='confirm-delete-button'
+                  disabled={deletingReplyId === replyToDelete.id}
+                >
+                  {deletingReplyId === replyToDelete.id ? '삭제 중...' : '삭제하기'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

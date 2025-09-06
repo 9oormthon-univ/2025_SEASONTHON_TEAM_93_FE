@@ -42,4 +42,30 @@ export const replyService = {
     
     return response.data;
   },
+
+  // 회고록 댓글 수정 (인증 필요)
+  updateReply: async (
+    warMemoirId: number,
+    replyId: number,
+    replyData: ReplyCreateRequest
+  ): Promise<ApiResponse<Reply>> => {
+    const response = await api.put<ApiResponse<Reply>>(
+      `/warmemoir/${warMemoirId}/replies/${replyId}`,
+      replyData
+    );
+    
+    return response.data;
+  },
+
+  // 회고록 댓글 삭제 (인증 필요)
+  deleteReply: async (
+    warMemoirId: number,
+    replyId: number
+  ): Promise<ApiResponse<string>> => {
+    const response = await api.delete<ApiResponse<string>>(
+      `/warmemoir/${warMemoirId}/replies/${replyId}`
+    );
+    
+    return response.data;
+  },
 };
