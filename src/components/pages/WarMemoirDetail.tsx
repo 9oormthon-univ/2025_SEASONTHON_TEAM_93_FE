@@ -152,7 +152,7 @@ const WarMemoirDetail = () => {
           {/* 댓글 목록 - replyService를 사용하여 실제 댓글 데이터 표시 */}
           <div className='comments-list'>
             <p className='comments-placeholder'>
-              댓글 기능은 향후 구현 예정입니다.
+              아직 댓글이 없습니다. 첫 댓글을 남겨보세요!
             </p>
           </div>
 
