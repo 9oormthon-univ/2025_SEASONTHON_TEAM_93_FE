@@ -115,6 +115,9 @@ const Header = () => {
           </ul>
         </nav>
       </div>
+      <div className='header-message'>
+        <p>여러분의 후원이 큰 힘이 됩니다</p>
+      </div>
     </header>
   );
 };
