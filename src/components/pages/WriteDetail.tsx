@@ -1,19 +1,19 @@
 import '../../styles/pages/WriteDetail.css';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { letterService } from '../../services';
+import type { LetterCreateRequest } from '../../types/api';
 
 const WriteDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    phone: '',
     title: '',
     content: '',
   });
+  
+  const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,11 +25,44 @@ const WriteDetail = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 편지 전송 로직
-    // 편지 전송 처리 (향후 API 연동)
-    alert('편지가 성공적으로 전송되었습니다!');
+    
+    if (!id || !formData.title.trim() || !formData.content.trim()) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    // 로그인 토큰 확인
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      
+      const letterData: LetterCreateRequest = {
+        title: formData.title.trim(),
+        content: formData.content.trim(),
+        warMemoirId: parseInt(id),
+      };
+
+      const response = await letterService.createLetter(letterData);
+      
+      if (response.isSuccess && response.result) {
+        alert(`편지가 성공적으로 전송되었습니다!\n"${response.result.warMemoir.title}"에 대한 편지가 작성되었습니다.`);
+        navigate('/write-letter');
+      } else {
+        alert('편지 전송에 실패했습니다: ' + response.message);
+      }
+    } catch (error) {
+      alert('편지 전송 중 오류가 발생했습니다.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleBackClick = () => {
@@ -40,65 +73,12 @@ const WriteDetail = () => {
     <main className='write-detail'>
       <div className='content-container'>
         <div className='letter-header'>
-          <h1>6.25 참전 영웅 {id?.padStart(3, '0')}</h1>
-          <p>영웅에게 당신의 마음을 전달해보세요!</p>
-          <p>선정된 편지는 영웅에게 직접 전달됩니다.</p>
+          <h1>회고록 #{id}에 편지 쓰기</h1>
+          <p>참전 영웅에게 당신의 마음을 전달해보세요!</p>
+          <p>작성된 편지는 검토 후 영웅에게 전달됩니다.</p>
         </div>
 
         <form onSubmit={handleSubmit} className='letter-form'>
-          <div className='form-row'>
-            <div className='form-group'>
-              <label htmlFor='name'>이름</label>
-              <input
-                type='text'
-                id='name'
-                name='name'
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder='Your Name'
-                required
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='email'>이메일</label>
-              <input
-                type='email'
-                id='email'
-                name='email'
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder='Your Email'
-                required
-              />
-            </div>
-          </div>
-
-          <div className='form-row'>
-            <div className='form-group'>
-              <label htmlFor='address'>주소</label>
-              <input
-                type='text'
-                id='address'
-                name='address'
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder='Your Address'
-                required
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='phone'>Phone</label>
-              <input
-                type='tel'
-                id='phone'
-                name='phone'
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder='010-0000-0000'
-                required
-              />
-            </div>
-          </div>
 
           <div className='form-group'>
             <label htmlFor='title'>제목*</label>
@@ -131,22 +111,28 @@ const WriteDetail = () => {
               type='button'
               className='btn-back'
               onClick={handleBackClick}
+              disabled={submitting}
             >
               뒤로가기
             </button>
-            <button type='submit' className='btn-send'>
-              <span>마음 전달하기</span>
-              <svg
-                className='send-icon'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
-              >
-                <line x1='22' y1='2' x2='11' y2='13' />
-                <polygon points='22,2 15,22 11,13 2,9 22,2' />
-              </svg>
-            </button>
+            <button 
+              type='submit' 
+              className='btn-send'
+              disabled={submitting || !formData.title.trim() || !formData.content.trim()}
+            >
+              <span>{submitting ? '편지 전송 중...' : '마음 전달하기'}</span>
+              {!submitting && (
+                <svg
+                  className='send-icon'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                >
+                  <line x1='22' y1='2' x2='11' y2='13' />
+                  <polygon points='22,2 15,22 11,13 2,9 22,2' />
+                </svg>
+              )}</button>
           </div>
         </form>
       </div>

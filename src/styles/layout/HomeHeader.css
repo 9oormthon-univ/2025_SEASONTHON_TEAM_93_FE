@@ -1,0 +1,244 @@
+/* HomeHeader - 홈페이지 전용 헤더 (배경 메시지 없음) */
+.home-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-image: url('/header-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.home-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.home-header-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.home-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80px;
+  gap: 2rem;
+}
+
+/* 로고 */
+.home-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: opacity 0.2s ease;
+}
+
+.home-logo:hover {
+  opacity: 0.9;
+}
+
+.home-logo-icon {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+}
+
+.home-logo-text {
+  color: white;
+}
+
+/* 네비게이션 */
+.home-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.home-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.home-nav-link.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.home-nav-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 2;
+}
+
+/* 인증 섹션 */
+.home-auth-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.home-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.home-user-email {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.home-logout-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.home-logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.home-login-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.home-login-btn:hover {
+  background-color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .home-nav {
+    gap: 0.25rem;
+  }
+
+  .home-nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .home-nav-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-header-content {
+    min-height: 70px;
+    gap: 1rem;
+  }
+
+  .home-logo {
+    font-size: 1.25rem;
+  }
+
+  .home-logo-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .home-nav {
+    gap: 0.125rem;
+  }
+
+  .home-nav-link {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .home-nav-link span:not(.home-nav-icon) {
+    display: none;
+  }
+
+  .home-user-email {
+    display: none;
+  }
+
+  .home-logout-btn,
+  .home-login-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-header-container {
+    padding: 0 0.75rem;
+  }
+
+  .home-header-content {
+    min-height: 60px;
+    gap: 0.5rem;
+  }
+
+  .home-logo {
+    font-size: 1.125rem;
+  }
+
+  .home-logo-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .home-nav-link {
+    padding: 0.375rem;
+  }
+
+  .home-nav-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}

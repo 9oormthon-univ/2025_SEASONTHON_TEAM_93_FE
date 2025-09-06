@@ -344,7 +344,10 @@ const WarMemoirDetail = () => {
             ← 목록으로 돌아가기
           </button>
           <div className='header-actions'>
-            <button className='letter-button'>
+            <button 
+              className='letter-button'
+              onClick={() => navigate(`/write-detail/${id}`)}
+            >
               해당 영웅에게 바로 편지쓰기
             </button>
           </div>

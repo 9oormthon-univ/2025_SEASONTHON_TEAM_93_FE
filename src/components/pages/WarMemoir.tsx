@@ -141,12 +141,11 @@ const WarMemoir = () => {
       <div className='content-container'>
         <div className='content-grid'>
           {memoirs.map(memoir => (
-            <div
-              key={memoir.id}
-              className='content-card'
-              onClick={() => handleCardClick(memoir.id)}
-            >
-              <div className='card-image'>
+            <div key={memoir.id} className='content-card'>
+              <div 
+                className='card-image'
+                onClick={() => handleCardClick(memoir.id)}
+              >
                 {memoir.image ? (
                   <img src={memoir.image} alt={memoir.title} />
                 ) : (
@@ -154,13 +153,29 @@ const WarMemoir = () => {
                 )}
               </div>
               <div className='card-content'>
-                <h3 className='card-title'>{memoir.title}</h3>
-                <p className='card-date'>
-                  {new Date(memoir.createdAt).toLocaleDateString('ko-KR')}
-                </p>
-                <p className='card-description'>
-                  댓글 {memoir.replyCount}개 • 섹션 {memoir.sectionCount}개
-                </p>
+                <div 
+                  className='card-info'
+                  onClick={() => handleCardClick(memoir.id)}
+                >
+                  <h3 className='card-title'>{memoir.title}</h3>
+                  <p className='card-date'>
+                    {new Date(memoir.createdAt).toLocaleDateString('ko-KR')}
+                  </p>
+                  <p className='card-description'>
+                    댓글 {memoir.replyCount}개 • 섹션 {memoir.sectionCount}개
+                  </p>
+                </div>
+                <div className='card-actions'>
+                  <button 
+                    className='write-letter-btn'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/write-detail/${memoir.id}`);
+                    }}
+                  >
+                    📝 편지쓰기
+                  </button>
+                </div>
               </div>
             </div>
           ))}

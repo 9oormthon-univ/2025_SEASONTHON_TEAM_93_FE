@@ -73,6 +73,41 @@
   margin: 0;
 }
 
+/* 카드 액션 영역 */
+.card-info {
+  flex: 1;
+  cursor: pointer;
+}
+
+.card-actions {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.write-letter-btn {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.write-letter-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
 /* 페이지네이션 */
 .pagination {
   display: flex;
@@ -167,6 +202,11 @@
 
   .card-content {
     padding: 1rem;
+  }
+
+  .write-letter-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
   }
 
   .pagination {

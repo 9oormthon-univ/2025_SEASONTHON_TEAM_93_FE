@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Header, Home, Donation, WarMemoir, WarMemoirDetail, WriteLetter, WriteDetail, KakaoLogin, MyPage, AuthGuard, LoginSuccess } from './components';
+import { Header, HomeHeader, Home, Donation, WarMemoir, WarMemoirDetail, WriteLetter, WriteDetail, KakaoLogin, MyPage, AuthGuard, LoginSuccess } from './components';
 import './App.css';
 
 // 카카오 로그인 토큰 처리 컴포넌트
@@ -55,7 +55,7 @@ function App() {
               path='/' 
               element={
                 <>
-                  <Header />
+                  <HomeHeader />
                   <Home />
                 </>
               } 

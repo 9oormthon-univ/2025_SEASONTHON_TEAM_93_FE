@@ -47,6 +47,38 @@ export interface LetterListItem {
   updatedAt: string;
 }
 
+// 편지 작성 요청 데이터
+export interface LetterCreateRequest {
+  title: string;
+  content: string;
+  warMemoirId: number;
+}
+
+// 편지 작성자 정보 (API 응답)
+export interface LetterAuthor {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// 회고록 정보 (편지 작성 응답용)
+export interface WarMemoirInfo {
+  id: number;
+  title: string;
+}
+
+// 편지 상세 정보 (작성 응답)
+export interface LetterDetail {
+  id: number;
+  title: string;
+  content: string;
+  isCompleted: boolean;
+  author: LetterAuthor;
+  warMemoir: WarMemoirInfo;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // 편지 페이지 요청 파라미터
 export interface LetterPageRequest {
   page: number;
@@ -88,5 +120,6 @@ export interface LetterPageResponse {
 export type LetterResponse = ApiResponse<Letter>;
 export type LetterListResponse = ApiResponse<Letter[]>;
 export type LetterPageApiResponse = ApiResponse<LetterPageResponse>;
+export type LetterCreateResponse = ApiResponse<LetterDetail>;
 export type HeroResponse = ApiResponse<Hero>;
 export type HeroListResponse = ApiResponse<Hero[]>;

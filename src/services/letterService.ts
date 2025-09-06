@@ -7,6 +7,8 @@ import type {
   LetterListResponse,
   LetterPageRequest,
   LetterPageApiResponse,
+  LetterCreateRequest,
+  LetterCreateResponse,
   HeroResponse,
   HeroListResponse,
 } from '../types/api';
@@ -48,14 +50,16 @@ export const letterService = {
     }
   },
 
-  // 편지 작성
-  createLetter: async (letterData: LetterData): Promise<LetterResponse> => {
-    try {
-      const response = await api.post('/api/letters', letterData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  // 편지 작성 (인증 필요)
+  createLetter: async (
+    letterData: LetterCreateRequest
+  ): Promise<LetterCreateResponse> => {
+    const response = await api.post<LetterCreateResponse>(
+      '/letters',
+      letterData
+    );
+    
+    return response.data;
   },
 
   // 편지 수정
