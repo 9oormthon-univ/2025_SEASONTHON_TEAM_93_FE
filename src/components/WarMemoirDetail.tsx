@@ -1,227 +1,111 @@
 import './WarMemoirDetail.css';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { memoirService } from '../api';
 
-// 샘플 데이터 (WarMemoir와 동일)
-const sampleMemoirs = [
-  {
-    id: 1,
-    title: '6.25 전쟁의 기억',
-    date: '2025.08.30',
-    description:
-      '1950년 6월 25일, 북한의 남침으로 시작된 전쟁의 첫날을 기억합니다. 당시 나는 20세의 젊은 병사였고, 갑작스러운 전쟁 소식에 충격을 받았습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 2,
-    title: '인천상륙작전의 감동',
-    date: '2025.08.29',
-    description:
-      '맥아더 장군의 인천상륙작전이 성공했을 때의 감동을 잊을 수 없습니다. 전세가 역전되는 순간을 목격했습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 3,
-    title: '동지들과의 우정',
-    date: '2025.08.28',
-    description:
-      '전쟁터에서 만난 동지들과의 깊은 우정은 평생 잊지 못할 소중한 추억입니다. 함께 고생하며 나눈 이야기들...',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 4,
-    title: '겨울의 추위',
-    date: '2025.08.27',
-    description:
-      '1950년 겨울의 혹독한 추위는 지금도 생생합니다. 얼어붙은 손발로도 끝까지 싸웠던 그날들을 기억합니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 5,
-    title: '고향에 대한 그리움',
-    date: '2025.08.26',
-    description:
-      '전쟁터에서 고향을 그리워하며 쓴 편지들. 가족들의 안부를 묻는 마음은 전쟁의 공포보다 더 컸습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 6,
-    title: '평화의 소중함',
-    date: '2025.08.25',
-    description:
-      '전쟁을 경험한 후에야 알게 된 평화의 소중함. 후세들에게는 절대 이런 일이 일어나지 않기를 바랍니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 7,
-    title: '휴전협정의 날',
-    date: '2025.08.24',
-    description:
-      '1953년 7월 27일, 휴전협정이 체결된 그날의 감정은 복잡했습니다. 기쁨과 아쉬움이 교차했습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 8,
-    title: '귀향길',
-    date: '2025.08.23',
-    description:
-      '전쟁이 끝나고 고향으로 돌아가는 길. 3년 만에 만나는 가족들의 모습은 잊을 수 없습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 9,
-    title: '전우들의 명복을 빌며',
-    date: '2025.08.22',
-    description:
-      '전쟁에서 목숨을 잃은 전우들을 기리며. 그들의 희생이 헛되지 않도록 살아남은 우리의 사명을 느낍니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 10,
-    title: '전쟁의 교훈',
-    date: '2025.08.21',
-    description:
-      '6.25 전쟁을 통해 배운 교훈들. 자유와 평화의 소중함, 그리고 나라를 지키는 것의 의미를 깨달았습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 11,
-    title: '후세를 위한 기록',
-    date: '2025.08.20',
-    description:
-      '이런 전쟁이 다시는 일어나지 않기를 바라며, 후세들에게 전해주고 싶은 이야기들을 기록합니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-  {
-    id: 12,
-    title: '영웅들의 이야기',
-    date: '2025.08.19',
-    description:
-      '전쟁터에서 목숨을 바쳐 싸운 영웅들의 이야기. 그들의 용기와 희생정신을 기억하고 싶습니다.',
-    content: `
-      <h3>소제목: 목차1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      
-      <h3>소제목: 목차2</h3>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      
-      <h3>소제목: 목차3</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    `,
-  },
-];
+// 타입 정의 (memoirService와 동일)
+interface MemoirSection {
+  id: number;
+  sectionOrder: number;
+  title: string;
+  content: string;
+}
+
+interface MemoirDetail {
+  id: number;
+  title: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  sections: MemoirSection[];
+  replyCount: number;
+}
 
 const WarMemoirDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [memoir, setMemoir] = useState<MemoirDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const memoir = sampleMemoirs.find(m => m.id === parseInt(id || '1'));
+  useEffect(() => {
+    const fetchMemoirDetail = async () => {
+      if (!id) {
+        setError('잘못된 회고록 ID입니다.');
+        setLoading(false);
+        return;
+      }
 
-  if (!memoir) {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await memoirService.getMemoirDetail(parseInt(id));
+
+        if (response.isSuccess && response.result) {
+          setMemoir(response.result);
+        } else {
+          setError('회고록을 불러오는데 실패했습니다.');
+        }
+      } catch (err) {
+        console.error('회고록 상세 조회 실패:', err);
+        setError('서버 연결에 실패했습니다.');
+        // 에러 시 샘플 데이터 사용
+        setMemoir({
+          id: parseInt(id),
+          title: '6.25 전쟁의 기억',
+          image: 'https://via.placeholder.com/800x400?text=6.25+전쟁의+기억',
+          createdAt: '2025-08-30T00:00:00.000Z',
+          updatedAt: '2025-08-30T00:00:00.000Z',
+          sections: [
+            {
+              id: 1,
+              sectionOrder: 1,
+              title: '입대 과정',
+              content:
+                '1950년 6월, 갑작스러운 전쟁 소식을 듣고 입대하게 되었습니다. 당시 나는 20세의 젊은 병사였고, 갑작스러운 전쟁 소식에 충격을 받았습니다. 가족들과의 이별은 너무나 아쉬웠지만, 나라를 지키는 것이 우선이라고 생각했습니다.',
+            },
+            {
+              id: 2,
+              sectionOrder: 2,
+              title: '전쟁터에서의 첫날',
+              content:
+                '전쟁터에 도착한 첫날의 기억은 지금도 생생합니다. 포성과 총성이 끊이지 않았고, 동료들의 얼굴에는 긴장감이 가득했습니다. 하지만 우리는 끝까지 싸울 것을 다짐했습니다.',
+            },
+            {
+              id: 3,
+              sectionOrder: 3,
+              title: '동지들과의 우정',
+              content:
+                '전쟁터에서 만난 동지들과의 깊은 우정은 평생 잊지 못할 소중한 추억입니다. 함께 고생하며 나눈 이야기들, 서로를 격려하며 버텨낸 시간들이 있었기에 우리는 살아남을 수 있었습니다.',
+            },
+          ],
+          replyCount: 5,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMemoirDetail();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className='war-memoir-detail'>
+        <div className='content-container'>
+          <div className='loading'>로딩 중...</div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error || !memoir) {
     return (
       <main className='war-memoir-detail'>
         <div className='content-container'>
           <div className='error-message'>
-            <h2>찾을 수 없는 회고록입니다.</h2>
-            <button onClick={() => navigate('/')} className='back-button'>
+            <h2>{error || '찾을 수 없는 회고록입니다.'}</h2>
+            <button onClick={() => navigate('/home')} className='back-button'>
               목록으로 돌아가기
             </button>
           </div>
@@ -235,7 +119,7 @@ const WarMemoirDetail = () => {
       <div className='content-container'>
         {/* 헤더 영역 */}
         <div className='detail-header'>
-          <button onClick={() => navigate('/')} className='back-button'>
+          <button onClick={() => navigate('/home')} className='back-button'>
             ← 목록으로 돌아가기
           </button>
           <div className='header-actions'>
@@ -248,19 +132,40 @@ const WarMemoirDetail = () => {
         {/* 제목 및 메타 정보 */}
         <div className='detail-meta'>
           <h1 className='detail-title'>{memoir.title}</h1>
-          <p className='detail-date'>발간일: {memoir.date}</p>
+          <p className='detail-date'>
+            발간일: {new Date(memoir.createdAt).toLocaleDateString('ko-KR')}
+          </p>
+          <p className='detail-updated'>
+            수정일: {new Date(memoir.updatedAt).toLocaleDateString('ko-KR')}
+          </p>
         </div>
 
         {/* 메인 이미지 */}
         <div className='detail-image'>
-          <div className='image-placeholder'>이미지</div>
+          {memoir.image ? (
+            <img src={memoir.image} alt={memoir.title} />
+          ) : (
+            <div className='image-placeholder'>이미지</div>
+          )}
         </div>
 
-        {/* 본문 내용 */}
-        <div
-          className='detail-content'
-          dangerouslySetInnerHTML={{ __html: memoir.content }}
-        />
+        {/* 섹션별 내용 */}
+        <div className='detail-content'>
+          {memoir.sections
+            .sort((a, b) => a.sectionOrder - b.sectionOrder)
+            .map(section => (
+              <div key={section.id} className='content-section'>
+                <h2 className='section-title'>{section.title}</h2>
+                <div className='section-content'>
+                  {section.content.split('\n').map((paragraph, index) => (
+                    <p key={index} className='section-paragraph'>
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
 
         {/* 도움을 준 분들 섹션 */}
         <div className='helpers-section'>
@@ -270,29 +175,29 @@ const WarMemoirDetail = () => {
               <div className='helper-image'>
                 <div className='image-placeholder'>이미지</div>
               </div>
-              <h3 className='helper-name'>이름</h3>
+              <h3 className='helper-name'>김상담</h3>
               <p className='helper-role'>심리상담가</p>
             </div>
             <div className='helper-card'>
               <div className='helper-image'>
                 <div className='image-placeholder'>이미지</div>
               </div>
-              <h3 className='helper-name'>이름</h3>
-              <p className='helper-role'>심리상담가</p>
+              <h3 className='helper-name'>이기록</h3>
+              <p className='helper-role'>기록 전문가</p>
             </div>
             <div className='helper-card'>
               <div className='helper-image'>
                 <div className='image-placeholder'>이미지</div>
               </div>
-              <h3 className='helper-name'>이름</h3>
-              <p className='helper-role'>심리상담가</p>
+              <h3 className='helper-name'>박편집</h3>
+              <p className='helper-role'>편집자</p>
             </div>
           </div>
         </div>
 
         {/* 댓글 섹션 */}
         <div className='comments-section'>
-          <h2 className='section-title'>댓글</h2>
+          <h2 className='section-title'>댓글 ({memoir.replyCount}개)</h2>
 
           {/* 기존 댓글들 */}
           <div className='comments-list'>
@@ -301,11 +206,11 @@ const WarMemoirDetail = () => {
                 <div className='avatar-placeholder'>로고</div>
               </div>
               <div className='comment-content'>
-                <h4 className='comment-title'>댓글 제목</h4>
-                <p className='comment-meta'>작성자 이름 | 작성날짜</p>
+                <h4 className='comment-title'>감동적인 이야기입니다</h4>
+                <p className='comment-meta'>김독자 | 2025.08.30</p>
                 <p className='comment-text'>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  영웅님의 이야기를 읽으며 많은 감동을 받았습니다. 평화의
+                  소중함을 다시 한번 깨닫게 되었습니다.
                 </p>
               </div>
             </div>
@@ -315,11 +220,11 @@ const WarMemoirDetail = () => {
                 <div className='avatar-placeholder'>로고</div>
               </div>
               <div className='comment-content'>
-                <h4 className='comment-title'>댓글 제목</h4>
-                <p className='comment-meta'>작성자 이름 | 작성날짜</p>
+                <h4 className='comment-title'>고맙습니다</h4>
+                <p className='comment-meta'>이감사 | 2025.08.29</p>
                 <p className='comment-text'>
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  우리나라를 위해 희생해주신 모든 분들께 감사드립니다.
+                  후세들에게 이런 이야기들이 전해져야 합니다.
                 </p>
               </div>
             </div>

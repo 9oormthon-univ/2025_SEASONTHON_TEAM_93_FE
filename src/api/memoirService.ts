@@ -18,6 +18,23 @@ interface Memoir {
   sectionCount: number;
 }
 
+interface MemoirSection {
+  id: number;
+  sectionOrder: number;
+  title: string;
+  content: string;
+}
+
+interface MemoirDetail {
+  id: number;
+  title: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  sections: MemoirSection[];
+  replyCount: number;
+}
+
 interface Pageable {
   unpaged: boolean;
   paged: boolean;
@@ -77,7 +94,9 @@ export const memoirService = {
   // 회고록 상세 조회
   getMemoirDetail: async (id: number) => {
     try {
-      const response = await api.get(`/warmemoir/${id}`);
+      const response = await api.get<ApiResponse<MemoirDetail>>(
+        `/warmemoir/${id}`
+      );
       return response.data;
     } catch (error) {
       console.error('회고록 상세 조회 실패:', error);
